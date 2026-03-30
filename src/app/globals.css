@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 166, 107, 0.15) transparent;
+}
+
+:root {
+  --font-instrument: 'Instrument Sans', sans-serif;
+  --accent-base: #C9A66B;
+  --accent-mid: rgba(201, 166, 107, 0.15);
+  --accent-dim: rgba(201, 166, 107, 0.08);
+  --accent2-base: #E8D5B5;
+  --accent2-dim: rgba(232, 213, 181, 0.06);
+}
+
+html {
+  background: #060508;
+  color: #F5F2ED;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+/* Accessibility focus states */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex="0"]:focus-visible,
+[role="tab"]:focus-visible {
+  outline: 2px solid #C9A66B;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+::selection {
+  background: rgba(201, 166, 107, 0.2);
+  color: #F5F2ED;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(201, 166, 107, 0.15);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 166, 107, 0.25);
+}
+
+/* ── Hero gradient text ── */
+.hero-gradient-text {
+  background: linear-gradient(135deg, #E8D5B5 0%, #C9A66B 50%, #A0845A 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: hero-gradient-shift 6s ease-in-out infinite;
+}
+
+@keyframes hero-gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-gradient-text {
+    animation: none;
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes border-pulse {
+  0%, 100% { border-color: rgba(245, 242, 237, 0.06); }
+  50% { border-color: rgba(245, 242, 237, 0.10); }
+}
+
+.animate-border-pulse {
+  animation: border-pulse 4s ease-in-out infinite;
+}
+
+/* ── Konami Easter Egg Amber Wash ── */
+body.theme-amber-wash {
+  background-color: #0A0804 !important;
+  transition: background-color 0.6s ease;
+}
+
+body.theme-amber-wash * {
+  color: rgba(201, 166, 107, 0.85) !important;
+  border-color: rgba(201, 166, 107, 0.2) !important;
+  transition: color 0.6s ease, border-color 0.6s ease, background-color 0.6s ease;
+}
+
+body.theme-amber-wash .bg-black,
+body.theme-amber-wash .bg-\[\#060508\] {
+  background-color: #0A0804 !important;
+}
+
+body.theme-amber-wash .backdrop-blur-glass {
+  background-color: rgba(10, 8, 4, 0.8) !important;
+}
+
+/* SMART CURSOR (MAGNETIC HUD) OVERRIDES */
+body.has-custom-cursor * {
+  cursor: none !important;
+}
+
+body.has-custom-cursor input,
+body.has-custom-cursor textarea,
+body.has-custom-cursor select,
+body.has-custom-cursor [contenteditable="true"] {
+  cursor: text !important;
+}
+
+/* ── WHISPER MICRO-TYPOGRAPHY ── */
+.whisper {
+  font-family: var(--font-instrument);
+  font-size: 7px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(232, 213, 181, 0.20);  /* 20% accent2-base — clearly visible cream */
+  user-select: none;
+  pointer-events: none;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.whisper-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+@keyframes whisper-breathe {
+  0%, 100% { opacity: 0.05; }
+  50% { opacity: 0.03; }
+}
+
+.animate-whisper-breathe {
+  animation: whisper-breathe 8s ease-in-out infinite;
+}
