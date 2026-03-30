@@ -1,6 +1,7 @@
 export const COLORS = {
     black: '#060508',
     white: '#F5F2ED',
+    nearWhite: '#FDFBFA',
     elevated: '#0E0C10',
     surface: '#141218',
     accent: {

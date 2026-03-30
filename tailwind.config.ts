@@ -12,6 +12,7 @@ const config: Config = {
       colors: {
         black: COLORS.black,
         white: COLORS.white,
+        nearWhite: COLORS.nearWhite,
         elevated: COLORS.elevated,
         surface: COLORS.surface,
         accent: COLORS.accent,

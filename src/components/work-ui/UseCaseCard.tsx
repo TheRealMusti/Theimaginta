@@ -80,7 +80,7 @@ export function UseCaseCard({ useCase }: UseCaseCardProps) {
                                         key={item.name}
                                         className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors"
                                     >
-                                        <h4 className="text-[14px] font-bold text-white mb-2">{item.name}</h4>
+                                        <h4 className="text-[14px] font-bold text-nearWhite mb-2">{item.name}</h4>
                                         <p className="text-[13px] leading-relaxed text-white/40">{item.description}</p>
                                     </div>
                                 ))}

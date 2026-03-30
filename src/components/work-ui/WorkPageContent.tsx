@@ -4,7 +4,7 @@ import React from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'framer-motion';
-import { Dumbbell, UtensilsCrossed, Cloud, ShoppingBag, Building2, Brain, Layers } from 'lucide-react';
+import { Dumbbell, UtensilsCrossed, Cloud, ShoppingBag, Building2, Brain, Layers, Car, Sparkles, Flame } from 'lucide-react';
 import { Container, Meta, Button, GlassPane } from '@/components/ui';
 import { ScaleReveal } from '@/components/motion/ScaleReveal';
 import { ScrollReveal } from '@/components/motion/ScrollReveal';
@@ -54,106 +54,101 @@ const USE_CASES: UseCaseData[] = [
         disciplines: ['Brand Identity', 'Web Design', 'Content Strategy', 'Photography Direction'],
     },
     {
-        slug: 'restaurant-digital-gap',
+        slug: 'artisan-pizza',
         filterKey: 'fixing-broken',
-        industry: 'Hospitality',
-        icon: UtensilsCrossed,
-        timeframe: '6 weeks',
-        headline: 'A fine dining restaurant had a Michelin-worthy kitchen and a website from 2015.',
-        situation:
-            "The food was exceptional — regulars raved, critics noticed. But online, the restaurant looked like it hadn't been updated in a decade. Mobile visitors couldn't find the menu, let alone book a table. They were losing weekend reservations to places with half the talent and twice the Instagram presence.",
-        approach: [
-            {
-                name: 'UX Design',
-                description:
-                    'Redesigned the entire booking flow to reduce friction to two taps. Menu presentation became visual and seasonal, updating dynamically without developer intervention.',
-            },
-            {
-                name: 'Web Development',
-                description:
-                    'Built a blazing-fast site on modern infrastructure. Optimized images, lazy-loaded everything non-critical, and achieved sub-second load times that search engines actually reward.',
-            },
-            {
-                name: 'Photography Direction',
-                description:
-                    "Art-directed a shoot that captured the restaurant's atmosphere — not just the plates. The imagery sold the experience of dining there, not just the food.",
-            },
-        ],
-        outcomes: [
-            { value: '+180%', label: 'Online reservations', detail: 'First quarter post-launch' },
-            { value: '94%', label: 'Weekend capacity', detail: 'Up from 71% average' },
-            { value: '0.8s', label: 'Page load time', detail: 'Down from 6.2 seconds' },
-        ],
-        quote: 'We finally look as good online as we taste in person.',
-        disciplines: ['UX Design', 'Web Development', 'Photography Direction', 'SEO'],
-    },
-    {
-        slug: 'saas-zero-to-beta',
-        filterKey: 'launching-new',
-        industry: 'SaaS',
-        icon: Cloud,
+        industry: 'Hospitality & Food',
+        icon: Flame,
         timeframe: '11 weeks',
-        headline: 'A founder had a validated idea, a seed round, and no product team.',
+        headline: 'The best pizza in Brussels, known only to the 40 people who could fit inside.',
         situation:
-            'The concept was proven through customer interviews and a waitlist of 400. The seed money was in the bank. But the clock was ticking — investors expected a working beta in 12 weeks, and the founder had zero technical team. Not a designer, not a developer, not even a Figma account.',
+            'Neapolitan-trained pizzaiolo, 72-hour fermented dough, imported ingredients, fully booked every night by word of mouth — but no website, no online ordering, no catering pipeline, and a brand that competed on price with \u20ac9 takeaway chains.',
         approach: [
+            {
+                name: 'Brand Identity',
+                description:
+                    'Built a visual identity that honours Neapolitan tradition without the clich\u00e9s — custom hand-drawn wordmark, oven-inspired colour palette, still-life photography direction.',
+            },
             {
                 name: 'Product Design',
                 description:
-                    'Ran compressed discovery sprints to map the core user journey. Designed a focused MVP that solved the primary pain point without feature bloat — every screen earned its place.',
+                    'Designed an ordering platform with menu micro-stories, a corporate catering flow with headcount calculators, and a reservation system — tested with 10 users before development.',
             },
             {
                 name: 'Development',
                 description:
-                    "Shipped a production-ready beta on a modern stack with CI/CD from day one. Built for scale from the start so the next team wouldn't need to rebuild.",
-            },
-            {
-                name: 'Brand Identity',
-                description:
-                    'Created a brand that felt established from launch — name system, visual identity, and pitch deck design that made the startup look like it had a 20-person team behind it.',
+                    'Built in Next.js with kitchen display integration, real-time order tracking, mobile PWA, automated loyalty system, and a CMS for menu management.',
             },
         ],
         outcomes: [
-            { value: '11 wks', label: 'Idea to live beta', detail: 'One week ahead of deadline' },
-            { value: '4.6/5', label: 'User satisfaction', detail: 'Beta tester feedback score' },
-            { value: 'Series A', label: 'Raised 6 months later', detail: 'Product demo sealed the deal' },
+            { value: '+220%', label: 'Monthly Revenue', detail: 'Within 4 months' },
+            { value: '\u20ac4,200', label: 'Avg. Catering Contract', detail: 'New revenue stream' },
+            { value: '+22%', label: 'Avg. Order Value', detail: 'Online vs. phone' },
         ],
-        quote: "They didn't just build what I described — they built what I actually needed.",
-        disciplines: ['Product Design', 'Development', 'Brand Identity', 'Pitch Design'],
+        quote: "My biggest problem now is whether to open a second location. That's a problem I never imagined having.",
+        disciplines: ['Brand Identity', 'Product Design', 'Development'],
     },
     {
-        slug: 'ecommerce-rebrand',
+        slug: 'aura-automotive',
         filterKey: 'scaling-operations',
-        industry: 'E-Commerce',
-        icon: ShoppingBag,
+        industry: 'Automotive & Luxury Services',
+        icon: Car,
         timeframe: '8 weeks',
-        headline: "An online store was growing revenue but their brand couldn't keep up.",
+        headline: "A master detailer's work spoke for itself — but his digital presence didn't say a word.",
         situation:
-            "Revenue was doubling year-over-year organically — the product was genuinely good. But the brand still looked like it was designed in Canva during a lunch break. Wholesale buyers wouldn't take meetings. Enterprise partnerships stalled at \"send us your brand guidelines,\" because there weren't any.",
+            "World-class ceramic coatings, PPF, and precision repair — booked by phone call, tracked by nothing, documented on the owner's camera roll. Clients spending €3,000+ expected a luxury digital experience to match.",
         approach: [
             {
                 name: 'Brand Identity',
                 description:
-                    'Developed a complete brand system — logo, typography, color, packaging, and a 40-page brand guidelines document that made wholesale conversations credible.',
+                    'Built a restrained luxury visual system — deep blacks, warm metallics, clean typography — that mirrors the precision of the craftsmanship itself.',
             },
             {
-                name: 'E-Commerce Design',
+                name: 'Product Design',
                 description:
-                    'Redesigned the storefront to match the brand elevation. Improved product presentation, streamlined checkout, and added wholesale inquiry flows for B2B buyers.',
-            },
-            {
-                name: 'Strategy',
-                description:
-                    'Repositioned the brand from "affordable alternative" to "premium direct-to-consumer." Pricing stayed competitive, but the perception shifted dramatically.',
+                    'Designed a complete digital product: booking with transparent pricing, real-time service tracker, client portal with before-and-after galleries, and maintenance schedules.',
             },
         ],
         outcomes: [
-            { value: '+62%', label: 'Wholesale inquiries', detail: 'B2B leads within 3 months' },
-            { value: '+28%', label: 'Avg order value', detail: 'Customers willing to pay more' },
-            { value: '2', label: 'Enterprise partnerships', detail: 'Landed within first quarter' },
+            { value: '62', label: 'Screens Designed', detail: 'Full-fidelity, every state' },
+            { value: '4.7/5', label: 'Usability Score', detail: 'Tested with real clients' },
+            { value: '38', label: 'Components', detail: 'Production-ready system' },
         ],
-        quote: 'We went from being ignored at trade shows to being invited to them.',
-        disciplines: ['Brand Identity', 'E-Commerce Design', 'Strategy', 'Packaging'],
+        quote: "They gave me something I didn't know I needed — a digital experience that feels like Aura.",
+        disciplines: ['Product Design', 'Brand Identity'],
+    },
+    {
+        slug: 'ellecanta-beauty',
+        filterKey: 'launching-new',
+        industry: 'Beauty & Skincare',
+        icon: Sparkles,
+        timeframe: '12 weeks',
+        headline: 'A skincare line with clinical-grade formulations and a Canva logo.',
+        situation:
+            'Three years of R&D, dermatologist-tested formulations, traceable Belgian ingredients — and a brand identity made in Canva, product photos shot on a kitchen counter, and 40 Instagram followers. In a market where perception is everything, they were invisible.',
+        approach: [
+            {
+                name: 'Brand Identity',
+                description:
+                    'Built a complete brand system — from positioning and visual identity through a 14-SKU packaging range in frosted glass with debossed caps and colour-coded navigation.',
+            },
+            {
+                name: 'AI Integration',
+                description:
+                    'Created a custom AI content pipeline producing 200+ on-brand visual assets in 4 weeks — product shots, textures, lifestyle imagery — with a reusable prompt system for ongoing content.',
+            },
+            {
+                name: 'Product Design',
+                description:
+                    'Designed the e-commerce experience with product micro-stories, a personalised skin quiz, and a checkout flow built for first-time premium skincare buyers.',
+            },
+        ],
+        outcomes: [
+            { label: 'Social Engagement', value: '+280%', detail: 'Launch quarter' },
+            { label: 'Shelf Impact Score', value: '94/100', detail: 'Consumer testing' },
+            { label: 'Visual Assets', value: '200+', detail: 'AI-assisted pipeline' },
+        ],
+        quote: "Our first retail buyer said the packaging alone closed the deal before she even tested the product.",
+        disciplines: ['Brand Identity', 'Product Design', 'AI Integration'],
     },
     {
         slug: 'corporate-wellness-iraq',
@@ -394,9 +389,12 @@ export default function WorkPageContent() {
                                 }
                                 className="relative"
                             >
-                                <ScrollReveal>
-                                    <UseCaseCard useCase={uc} />
-                                </ScrollReveal>
+                                {/* TODO: Build individual case study pages for all remaining slugs */}
+                                <Link href={`/work/${uc.slug}`} className="block">
+                                    <ScrollReveal>
+                                        <UseCaseCard useCase={uc} />
+                                    </ScrollReveal>
+                                </Link>
                             </motion.div>
                         ))}
                     </AnimatePresence>

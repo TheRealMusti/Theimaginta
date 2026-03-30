@@ -517,7 +517,7 @@ function PhasePanel({
                                 <Meta className="text-accent-base mb-[12px] block">
                                     PHASE {phase.number}
                                 </Meta>
-                                <h4 className="font-sans text-[24px] font-semibold text-white tracking-[-0.01em]">
+                                <h4 className="font-sans text-[24px] font-semibold text-nearWhite tracking-[-0.01em]">
                                     {phase.title}
                                 </h4>
                                 <p className="mt-[16px] font-sans text-[15px] font-normal leading-[1.7] text-white/[0.55] max-w-[440px]">
@@ -762,7 +762,7 @@ function MobileTimeline({
                                                         <Meta className="text-accent-base mb-[10px] block">
                                                             PHASE {phase.number}
                                                         </Meta>
-                                                        <h4 className="font-sans text-[20px] font-semibold text-white tracking-[-0.01em]">
+                                                        <h4 className="font-sans text-[20px] font-semibold text-nearWhite tracking-[-0.01em]">
                                                             {phase.title}
                                                         </h4>
                                                         <p className="mt-[12px] font-sans text-[14px] font-normal leading-[1.7] text-white/[0.55]">

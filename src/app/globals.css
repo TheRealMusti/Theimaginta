@@ -27,6 +27,10 @@ html {
   scroll-behavior: smooth;
 }
 
+h4, h5, h6 {
+  color: #FDFBFA;
+}
+
 /* Accessibility focus states */
 a:focus-visible,
 button:focus-visible,
