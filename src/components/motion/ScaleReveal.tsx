@@ -4,7 +4,7 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { EASING } from '@/lib/constants';
 
-export interface ScaleRevealProps {
+interface ScaleRevealProps {
     children: React.ReactNode;
     delay?: number;
     className?: string;

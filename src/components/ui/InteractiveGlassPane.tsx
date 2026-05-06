@@ -19,7 +19,8 @@ export const InteractiveGlassPane = forwardRef<HTMLDivElement, InteractiveGlassP
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             
-            highlightRef.current.style.background = `radial-gradient(250px circle at ${x}px ${y}px, rgba(201,166,107, 0.05), transparent 70%)`;
+            highlightRef.current.style.background = `radial-gradient(300px circle at ${x}px ${y}px, rgba(201,166,107, 0.06) 0%, rgba(201,166,107, 0.01) 40%, transparent 80%)`;
+            highlightRef.current.style.mixBlendMode = 'luminosity';
             highlightRef.current.style.opacity = '1';
         };
 
@@ -34,8 +35,14 @@ export const InteractiveGlassPane = forwardRef<HTMLDivElement, InteractiveGlassP
                 // @ts-expect-error - GlassPane component does not strictly type the ref prop
                 ref={ref}
                 className={`relative overflow-hidden group transition-all duration-500 ease ${className}`}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
+                onMouseMove={(e) => {
+                    handleMouseMove(e);
+                    props.onMouseMove?.(e);
+                }}
+                onMouseLeave={(e) => {
+                    handleMouseLeave();
+                    props.onMouseLeave?.(e);
+                }}
                 data-cursor={dataCursor}
                 {...props}
             >

@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import WorkPageContent from '@/components/work-ui/WorkPageContent';
+import WorkPageContent from '@/components/sections/work/WorkPageContent';
 
 export const metadata: Metadata = {
     title: 'Use Cases — Imaginta | Business Problems We Solve',

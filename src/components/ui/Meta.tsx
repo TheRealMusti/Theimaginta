@@ -2,7 +2,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-export interface MetaProps {
+interface MetaProps {
     children: React.ReactNode;
     accent?: boolean;
     className?: string;
@@ -14,7 +14,7 @@ export function Meta({ children, accent = false, className, as: Component = 'spa
         <Component
             className={cn(
                 'font-sans text-[10px] font-medium tracking-[0.16em] uppercase',
-                accent ? 'text-white' : 'text-text-metadata',
+                accent ? 'text-[#F5F2ED]' : 'text-[rgba(245,242,237,0.35)]',
                 className
             )}
         >

@@ -1,9 +1,9 @@
 'use client';
 
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
-export interface SectionAtmosphereProps {
+interface SectionAtmosphereProps {
     number: string;
     glowColor: string;
     glowPosition: { left?: string; right?: string; top?: string; bottom?: string };
@@ -14,24 +14,23 @@ export interface SectionAtmosphereProps {
 export function SectionAtmosphere({ number, glowColor, glowPosition, glowSize, isHovered }: SectionAtmosphereProps) {
     const prefersReducedMotion = useReducedMotion();
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
     
     // Parallax
     const { scrollYProgress } = useScroll({
-        target: containerRef,
+        target: isMounted ? containerRef : undefined,
         offset: ["start end", "end start"]
     });
     
-    // Y parallax -> ranges from +80px at section entering, to -80px when leaving
-    const yOffset = useTransform(scrollYProgress, [0, 1], [80, -80]);
-
-    // Handle desktop (3%) vs mobile (2%) and hover (5%) targeting pure CSS 
-    // to keep it clean and responsive
-    const opacityClass = isHovered 
-        ? 'opacity-[0.05]' 
-        : 'opacity-[0.02] md:opacity-[0.03]';
+    // Y parallax -> ranges from +40px at section entering, to -40px when leaving
+    const yOffset = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
     return (
-        <div ref={containerRef} className="absolute inset-0 z-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        <div ref={containerRef} className="absolute inset-0 z-0 pointer-events-none overflow-hidden group/atmosphere" aria-hidden="true">
             {/* Ambient Glow */}
             <motion.div 
                 className="absolute mix-blend-screen md:block"
@@ -48,16 +47,71 @@ export function SectionAtmosphere({ number, glowColor, glowPosition, glowSize, i
                 }}
             />
 
-            {/* Large Parallax Number */}
+            {/* Enhanced Technical Identifier Module */}
             <motion.div
-                className={`absolute right-[-4%] md:right-[-5%] top-[10%] md:top-1/2 md:-translate-y-1/2 font-sans font-[800] tracking-[-0.06em] text-[#C9A66B] select-none transition-opacity duration-[800ms] ease-out ${opacityClass}`}
+                className="absolute right-[4%] md:right-[5%] top-[8%] md:top-[10%] flex items-start gap-6 select-none transition-all duration-1000"
                 style={{
-                    fontSize: 'clamp(120px, 30vw, 180px)', // Mobile size baseline
-                    lineHeight: 1,
-                    y: prefersReducedMotion ? 0 : yOffset
+                    y: (prefersReducedMotion || !isMounted) ? 0 : yOffset,
+                    opacity: isHovered ? 0.8 : 0.4
                 }}
             >
-                <span className="md:text-[clamp(180px,25vw,320px)]">{number}</span>
+                {/* Vertical Signal Line */}
+                <div className="h-24 w-[1px] bg-gradient-to-b from-transparent via-accent-base/20 to-transparent relative overflow-hidden">
+                    <motion.div 
+                        className="absolute top-0 left-0 w-full h-8 bg-accent-base/60 blur-[2px]"
+                        animate={{ top: ['0%', '100%'] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                    />
+                </div>
+
+                <div className="flex flex-col gap-4">
+                    {/* Meta Header */}
+                    <div className="flex items-center gap-3">
+                        <span className="text-[9px] font-mono font-bold tracking-[0.5em] text-accent-base/60 uppercase">
+                            SYSTEM_SEC_0{number.slice(0, 1)}
+                        </span>
+                        <div className="flex gap-1">
+                            {[1, 2, 3].map(i => (
+                                <motion.div 
+                                    key={i}
+                                    className="w-1 h-1 rounded-full bg-accent-base/40"
+                                    animate={{ opacity: [0.3, 1, 0.3] }}
+                                    transition={{ duration: 1.5, delay: i * 0.2, repeat: Infinity }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Main Section Label with Layered Typography */}
+                    <div className="relative group/label">
+                        {/* Background Watermark (Ghost) */}
+                        <span className="absolute -top-4 -left-4 text-[44px] md:text-[64px] font-bold text-white/[0.03] tracking-tighter transition-all duration-1000 group-hover/atmosphere:text-accent-base/[0.08] group-hover/atmosphere:scale-110">
+                            {number}
+                        </span>
+                        
+                        {/* Primary Label */}
+                        <div className="relative z-10 flex flex-col">
+                            <h2 className="text-xl md:text-2xl font-bold text-white/50 tracking-[0.2em] uppercase transition-all duration-700 group-hover/atmosphere:text-white group-hover/atmosphere:tracking-[0.25em]">
+                                {number}
+                            </h2>
+                            <div className="h-[1px] w-0 bg-accent-base/40 group-hover/atmosphere:w-full transition-all duration-700 mt-1" />
+                        </div>
+                    </div>
+
+                    {/* Technical Footer Detail */}
+                    <div className="flex flex-col gap-1 border-l border-white/5 pl-4 group-hover/atmosphere:border-accent-base/30 transition-colors duration-700">
+                        <span className="text-[8px] font-mono text-white/20 tracking-[0.2em] uppercase">
+                            LAT_50.8503 / LON_4.3517
+                        </span>
+                        <span className="text-[8px] font-mono text-white/20 tracking-[0.2em] uppercase flex items-center gap-2">
+                            STATUS // <span className="text-accent-base/60 animate-pulse">OPTIMIZED</span>
+                        </span>
+                    </div>
+                </div>
+
+                {/* Corner Accents */}
+                <div className="absolute -top-4 -right-4 w-4 h-4 border-t border-r border-white/5 group-hover/atmosphere:border-accent-base/40 transition-all duration-700" />
+                <div className="absolute -bottom-4 -left-4 w-4 h-4 border-b border-l border-white/5 group-hover/atmosphere:border-accent-base/40 transition-all duration-700" />
             </motion.div>
         </div>
     );

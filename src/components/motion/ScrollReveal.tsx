@@ -4,7 +4,7 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { EASING } from '@/lib/constants';
 
-export interface ScrollRevealProps {
+interface ScrollRevealProps {
     children: React.ReactNode;
     delay?: number;
     className?: string;

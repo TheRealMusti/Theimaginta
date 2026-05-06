@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, useReducedMotion, useInView } from 'fr
 import { useRef, useEffect, useState } from 'react';
 import { useScrollVelocity } from '@/hooks/useScrollVelocity';
 
-export interface OpticalFocusProps {
+interface OpticalFocusProps {
     children: React.ReactNode;
     maxBlur?: number;
     sensitivity?: 'high' | 'medium' | 'low';

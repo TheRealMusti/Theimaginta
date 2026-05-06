@@ -41,7 +41,7 @@ export function FilterBar({ activeFilter, onFilterChange }: FilterBarProps) {
                                 'transition-all duration-500 ease-out min-h-[40px]',
                                 isActive
                                     ? 'text-accent-base'
-                                    : 'text-white/40 hover:text-white/80'
+                                    : 'text-white/60 hover:text-white/80'
                             )}
                         >
                             {isActive && (

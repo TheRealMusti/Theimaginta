@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
-import { Container, Meta, Hairline } from '@/components/ui';
+import { Container, Meta } from '@/components/ui';
 import { FadeUp, ScaleReveal } from '@/components/motion';
-import { AboutOrigin, AboutPrinciples, AboutAdvantages, AboutMetrics, AboutFit, AboutStudio, AboutTestimonial, AboutCTA } from '@/components/about-ui';
+import { AboutOrigin, AboutPrinciples, AboutAdvantages, AboutMetrics, AboutFit, AboutStudio, AboutTestimonial, AboutCTA } from '@/components/sections/about/index';
 
 export const metadata: Metadata = {
     title: 'About — Imaginta',
@@ -53,7 +53,7 @@ export default function AboutPage() {
 
                             <FadeUp delay={0.45}>
                                 <p className="font-sans text-[18px] font-normal text-white/[0.72] leading-[1.8] mt-[32px] max-w-[540px] mx-auto">
-                                    You hire an agency. They build something beautiful. They disappear. Six months later, you need changes and there's no one to call. Imaginta was built to be the opposite of that.
+                                    You hire an agency. They build something beautiful. They disappear. Six months later, you need changes and there&apos;s no one to call. Imaginta was built to be the opposite of that.
                                 </p>
                             </FadeUp>
 

@@ -20,7 +20,7 @@
 }
 
 html {
-  background: #060508;
+  background: #030303;
   color: #F5F2ED;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -124,7 +124,7 @@ body.theme-amber-wash * {
 }
 
 body.theme-amber-wash .bg-black,
-body.theme-amber-wash .bg-\[\#060508\] {
+body.theme-amber-wash .bg-\[\#030303\] {
   background-color: #0A0804 !important;
 }
 
@@ -170,4 +170,26 @@ body.has-custom-cursor [contenteditable="true"] {
 
 .animate-whisper-breathe {
   animation: whisper-breathe 8s ease-in-out infinite;
+}
+
+/* ── PRELOADER ANIMATIONS ── */
+@keyframes light-sweep {
+  0% { transform: translateX(-100%) skewX(-20deg); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateX(200%) skewX(-20deg); opacity: 0; }
+}
+
+@keyframes resonance-ripple {
+  0% { transform: translateY(-100%); opacity: 0; }
+  20% { opacity: 0.5; }
+  80% { opacity: 0.5; }
+  100% { transform: translateY(400%); opacity: 0; }
+}
+
+.animate-light-sweep {
+  animation: light-sweep 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-resonance-ripple {
+  animation: resonance-ripple 3s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-export interface ContainerProps {
+interface ContainerProps {
     children: React.ReactNode;
     className?: string;
 }

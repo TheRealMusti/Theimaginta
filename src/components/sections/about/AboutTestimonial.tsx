@@ -15,13 +15,13 @@ export function AboutTestimonial() {
                     >
                         {/* Background Quote Mark Watermark */}
                         <div className="absolute top-[-20px] left-[50%] -translate-x-1/2 font-serif text-[240px] text-accent-base/[0.04] select-none pointer-events-none leading-none">
-                            "
+                            &quot;
                         </div>
 
                         <div className="relative z-10 max-w-[760px]">
                             <FadeUp delay={0.1}>
                                 <p className="font-sans text-[22px] md:text-[28px] font-medium tracking-tight text-white leading-[1.5] mb-[32px]">
-                                    "Imaginta didn't just redesign our platform — they rethought how we communicate our entire business model. The difference isn't just aesthetic; it's operational. They're the partner we should have hired two years ago."
+                                    &quot;Imaginta didn&apos;t just redesign our platform — they rethought how we communicate our entire business model. The difference isn&apos;t just aesthetic; it&apos;s operational. They&apos;re the partner we should have hired two years ago.&quot;
                                 </p>
                             </FadeUp>
                             

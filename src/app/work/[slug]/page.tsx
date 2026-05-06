@@ -1,9 +1,8 @@
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { caseStudies, getCaseStudy } from '@/data/case-studies';
-import { CaseStudyPage } from '@/components/work-ui/CaseStudyPage';
+import { CaseStudyPage } from '@/components/sections/work/CaseStudyPage';
 import { Container, Button, GlassPane } from '@/components/ui';
-import Link from 'next/link';
 
 interface PageProps {
   params: { slug: string };

@@ -6,12 +6,12 @@ import { Plus, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Hairline } from '@/components/ui';
 
-export interface FAQItem {
+interface FAQItem {
     question: string;
     answer: string;
 }
 
-export interface FAQAccordionProps {
+interface FAQAccordionProps {
     items: FAQItem[];
 }
 

@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { GlassPane, Meta } from '@/components/ui';
-import { useScroll } from 'framer-motion';
 
 const PHASES = [
     { id: 'intro', num: '01', name: 'Intro', width: '5%' },
@@ -15,7 +14,6 @@ const PHASES = [
 
 export function HeaderTimelineBar() {
     const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
-    const { scrollYProgress } = useScroll();
     
     // We could map scrollProgress to active phase, but for simplicity here we just support click & hover
     // The prompt says "The segment for the phase currently in view fills with amber". 

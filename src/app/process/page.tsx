@@ -1,12 +1,12 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Container, Whisper, Meta, GlassPane, Hairline } from '@/components/ui';
+import { Container, Meta, GlassPane, Hairline } from '@/components/ui';
 import { FadeUp, ScaleReveal, ScrollReveal, StaggerGroup, StaggerItem } from '@/components/motion';
 
 import { CTABand } from '@/components/sections/CTABand';
-import { ProcessJourney, PhaseAtmosphere, PhaseNode, TimelineSummary } from '@/components/process-ui';
-import { HeaderTimelineBar } from '@/components/process-ui/HeaderTimelineBar';
+import { ProcessJourney, PhaseAtmosphere, PhaseNode, TimelineSummary } from '@/components/sections/process/index';
+import { HeaderTimelineBar } from '@/components/sections/process/HeaderTimelineBar';
 
 export const metadata: Metadata = {
     title: 'Process — Imaginta',
@@ -409,7 +409,7 @@ export default function ProcessPage() {
                                         We work in focused, two-week sprint cycles. Because we front-loaded the hard decisions during Discovery and Strategy, the Build phase moves incredibly fast.
                                     </p>
                                     <p className="font-sans text-[16px] font-normal text-white/[0.72] leading-[1.8]">
-                                        At the end of every sprint, you get a staging link. You click the buttons. You test the forms. We don't talk about progress — we show it.
+                                        At the end of every sprint, you get a staging link. You click the buttons. You test the forms. We don&apos;t talk about progress — we show it.
                                     </p>
 
                                     <div className="mt-[32px] pt-[24px] border-t border-accent-base/10 flex flex-col gap-[12px]">

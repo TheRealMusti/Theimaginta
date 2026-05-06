@@ -38,19 +38,19 @@ export function AboutOrigin() {
                         <div className="mt-[28px] flex flex-col gap-[20px]">
                             <FadeUp delay={0.1}>
                                 <p className="font-sans text-[16px] font-normal text-white/[0.72] leading-[1.8]">
-                                    Imaginta was founded by Mustafa — a creative technologist born in Baghdad, shaped by both Middle Eastern warmth and European precision. Moving to Belgium in 2011 didn't just change his address. It gave him a second design vocabulary.
+                                    Imaginta was founded by Mustafa — a creative technologist born in Baghdad, shaped by both Middle Eastern warmth and European precision. Moving to Belgium in 2011 didn&apos;t just change his address. It gave him a second design vocabulary.
                                 </p>
                             </FadeUp>
                             
                             <FadeUp delay={0.2}>
                                 <p className="font-sans text-[16px] font-normal text-white/[0.72] leading-[1.8]">
-                                    That dual perspective — the hospitality and richness of Arabic culture fused with the structure and minimalism of European design — is what makes Imaginta's work feel different. Warmer than most tech. Sharper than most agencies. Human at the core.
+                                    That dual perspective — the hospitality and richness of Arabic culture fused with the structure and minimalism of European design — is what makes Imaginta&apos;s work feel different. Warmer than most tech. Sharper than most agencies. Human at the core.
                                 </p>
                             </FadeUp>
 
                             <FadeUp delay={0.3}>
                                 <p className="font-sans text-[16px] font-normal text-white/[0.72] leading-[1.8]">
-                                    Before Imaginta, Mustafa spent years working across branding, product design, and frontend architecture — wearing every hat at once because that's what startups demand. He built Imaginta around a simple belief: small businesses deserve the same caliber of digital craft that only large companies usually get.
+                                    Before Imaginta, Mustafa spent years working across branding, product design, and frontend architecture — wearing every hat at once because that&apos;s what startups demand. He built Imaginta around a simple belief: small businesses deserve the same caliber of digital craft that only large companies usually get.
                                 </p>
                             </FadeUp>
                         </div>

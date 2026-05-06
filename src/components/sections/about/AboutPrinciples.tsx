@@ -7,32 +7,32 @@ const PRINCIPLES = [
     {
         num: '01',
         title: 'Partnerships, Not Projects',
-        desc: "We don't optimize for project volume. We optimize for depth. Our best work happens in month 8, not week 1 — because that's when we understand your business well enough to make decisions that actually matter."
+        desc: "We don&apos;t optimize for project volume. We optimize for depth. Our best work happens in month 8, not week 1 — because that&apos;s when we understand your business well enough to make decisions that actually matter."
     },
     {
         num: '02',
         title: 'Design Is the Strategy',
-        desc: "We don't separate strategy from execution. The way something looks, works, and feels IS the strategy. If the design can't explain the business model at a glance, it's not done."
+        desc: "We don&apos;t separate strategy from execution. The way something looks, works, and feels IS the strategy. If the design can&apos;t explain the business model at a glance, it&apos;s not done."
     },
     {
         num: '03',
         title: 'Small Teams, Full Context',
-        desc: "Your project isn't passed between departments. The person who designed the brand is in the room when the code ships. Context is the most expensive thing in digital — we never waste it."
+        desc: "Your project isn&apos;t passed between departments. The person who designed the brand is in the room when the code ships. Context is the most expensive thing in digital — we never waste it."
     },
     {
         num: '04',
         title: 'Honesty Over Comfort',
-        desc: "We'll tell you if your idea needs rethinking. We'll flag scope that doesn't serve the goal. We'd rather have an uncomfortable conversation now than deliver mediocre work later."
+        desc: "We&apos;ll tell you if your idea needs rethinking. We&apos;ll flag scope that doesn&apos;t serve the goal. We&apos;d rather have an uncomfortable conversation now than deliver mediocre work later."
     },
     {
         num: '05',
         title: 'Craft Is Not a Luxury',
-        desc: "Pixel-level precision, considered typography, smooth interactions — these aren't extras for big budgets. They're the baseline. Every business deserves work that looks like someone cared."
+        desc: "Pixel-level precision, considered typography, smooth interactions — these aren&apos;t extras for big budgets. They&apos;re the baseline. Every business deserves work that looks like someone cared."
     },
     {
         num: '06',
         title: 'Technology Serves People',
-        desc: "We don't chase trends. We don't add AI because it's fashionable. Every technical decision answers one question: does this make a real person's experience better? If not, we don't build it."
+        desc: "We don&apos;t chase trends. We don&apos;t add AI because it&apos;s fashionable. Every technical decision answers one question: does this make a real person&apos;s experience better? If not, we don&apos;t build it."
     }
 ];
 

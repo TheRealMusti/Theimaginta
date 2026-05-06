@@ -4,20 +4,20 @@ import { Container, Meta, GlassPane, Hairline } from '@/components/ui';
 import { FadeUp, ScrollReveal } from '@/components/motion';
 
 const GREAT_FIT = [
-    "You're a startup or SME (5–200 people) building something real",
+    "You&apos;re a startup or SME (5–200 people) building something real",
     "You want a long-term partner, not a one-time deliverable",
     "You care about quality — not just speed",
-    "You're ready to invest in digital as a core business asset",
+    "You&apos;re ready to invest in digital as a core business asset",
     "You need brand, product, and code to work as one system",
     "You value honest, direct communication"
 ];
 
 const NOT_FIT = [
     "You need a project finished in under 2 weeks",
-    "You're looking for the cheapest option available",
+    "You&apos;re looking for the cheapest option available",
     "You want to manage every pixel yourself",
     "You need a team of 20+ people on a single project",
-    "You're after a template site with no custom design",
+    "You&apos;re after a template site with no custom design",
     "You prefer working with a large agency brand name"
 ];
 
@@ -29,7 +29,7 @@ export function AboutFit() {
             <Container>
                 {/* SECTION HEADER */}
                 <FadeUp className="flex flex-col items-center text-center max-w-[680px] mx-auto mb-[48px]">
-                    <Meta className="mb-[12px] text-white/[0.3]">WHO WE'RE BUILT FOR</Meta>
+                    <Meta className="mb-[12px] text-white/[0.3]">WHO WE&apos;RE BUILT FOR</Meta>
                     <h2 className="font-sans text-[28px] font-semibold tracking-[-0.02em] text-white leading-[1.25]">
                         Imaginta is for businesses that want a digital partner — not a digital vendor.
                     </h2>
@@ -44,7 +44,7 @@ export function AboutFit() {
                             className="h-full bg-accent-base/[0.04] border-accent-base/[0.2] shadow-[inset_0_1px_0_rgba(201,166,107,0.15)] transition-colors duration-400 hover:bg-accent-base/[0.08]"
                             data-cursor="FIT · GREAT MATCH"
                         >
-                            <h3 className="font-sans text-[18px] font-medium text-white mb-[24px]">We're a great fit if...</h3>
+                            <h3 className="font-sans text-[18px] font-medium text-white mb-[24px]">We&apos;re a great fit if...</h3>
                             <ul className="flex flex-col gap-[14px]">
                                 {GREAT_FIT.map((item, i) => (
                                     <li key={i} className="flex items-start gap-[12px]">
@@ -63,7 +63,7 @@ export function AboutFit() {
                             className="h-full bg-white/[0.015] border-[rgba(245,242,237,0.04)] shadow-none transition-colors duration-400 hover:bg-white/[0.03]"
                             data-cursor="FIT · NOT IDEAL"
                         >
-                            <h3 className="font-sans text-[18px] font-medium text-white/[0.55] mb-[24px]">We're probably not the right fit if...</h3>
+                            <h3 className="font-sans text-[18px] font-medium text-white/[0.55] mb-[24px]">We&apos;re probably not the right fit if...</h3>
                             <ul className="flex flex-col gap-[14px]">
                                 {NOT_FIT.map((item, i) => (
                                     <li key={i} className="flex items-start gap-[12px]">

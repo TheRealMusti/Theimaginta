@@ -6,12 +6,12 @@ import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { EASING } from '@/lib/constants';
 
-export interface SelectOption {
+interface SelectOption {
     value: string;
     label: string;
 }
 
-export interface CustomSelectProps {
+interface CustomSelectProps {
     options: SelectOption[];
     value: string;
     onChange: (value: string) => void;

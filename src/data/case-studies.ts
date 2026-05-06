@@ -377,11 +377,11 @@ export const caseStudies: CaseStudy[] = [
       role: 'Founder & Pizzaiolo, Artisan Pizza',
     },
   },
-  { id: 'saas-zero-to-beta', status: 'coming-soon' } as any,
-  { id: 'corporate-wellness-iraq', status: 'coming-soon' } as any,
-  { id: 'hotel-booking-conversion', status: 'coming-soon' } as any,
-  { id: 'ai-fitness-intelligence', status: 'coming-soon' } as any,
-  { id: 'agency-own-platform', status: 'coming-soon' } as any,
+  { id: 'saas-zero-to-beta', status: 'coming-soon' } as unknown as CaseStudy,
+  { id: 'corporate-wellness-iraq', status: 'coming-soon' } as unknown as CaseStudy,
+  { id: 'hotel-booking-conversion', status: 'coming-soon' } as unknown as CaseStudy,
+  { id: 'ai-fitness-intelligence', status: 'coming-soon' } as unknown as CaseStudy,
+  { id: 'agency-own-platform', status: 'coming-soon' } as unknown as CaseStudy,
 ];
 
 export function getCaseStudy(slug: string) {

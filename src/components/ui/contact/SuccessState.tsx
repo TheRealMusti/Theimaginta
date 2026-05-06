@@ -6,7 +6,7 @@ import { Check } from 'lucide-react';
 import Link from 'next/link';
 import { Meta } from '@/components/ui';
 
-export interface SuccessStateProps {
+interface SuccessStateProps {
     successRef: React.RefObject<HTMLHeadingElement>;
 }
 

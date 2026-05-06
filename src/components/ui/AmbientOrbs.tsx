@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 
-export interface OrbConfig {
+interface OrbConfig {
     color: string;
     size: number;
     x: string;

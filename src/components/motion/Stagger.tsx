@@ -4,7 +4,7 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { EASING } from '@/lib/constants';
 
-export interface StaggerGroupProps {
+interface StaggerGroupProps {
     children: React.ReactNode;
     className?: string;
     delay?: number;
@@ -37,7 +37,7 @@ export function StaggerGroup({ children, className, delay = 0.3 }: StaggerGroupP
     );
 }
 
-export interface StaggerItemProps {
+interface StaggerItemProps {
     children: React.ReactNode;
     className?: string;
     rotateX?: boolean;

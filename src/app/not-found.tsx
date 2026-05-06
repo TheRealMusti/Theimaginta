@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 
 export default function NotFound() {
     return (
-        <main data-cursor="VOID · EMPTY" className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
+        <main data-cursor="VOID · EMPTY" className="min-h-screen bg-[#030303] flex items-center justify-center relative overflow-hidden">
             {/* Fake ambient layer for 404 to appear brighter */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(201,166,107,0.05)_0%,transparent_60%)] pointer-events-none z-0" />
             

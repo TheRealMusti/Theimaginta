@@ -2,17 +2,17 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { 
   Container, 
   Meta, 
-  Badge, 
   Hairline, 
   GlassPane, 
   Button, 
   CountUpNumber,
   SectionAtmosphere 
 } from '@/components/ui';
+import Image from 'next/image';
 import { FadeUp, ScaleReveal, StaggerGroup, ScrollReveal } from '@/components/motion';
 import { EASING } from '@/lib/constants';
 import type { CaseStudy } from '@/data/case-studies';
@@ -23,7 +23,6 @@ interface CaseStudyPageProps {
 }
 
 export function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
-  const prefersReducedMotion = useReducedMotion();
   const { scrollY } = useScroll();
   
   // Parallax for background numbers
@@ -34,7 +33,7 @@ export function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
   const adjacent = getAdjacentStudies(caseStudy.id);
 
   return (
-    <div className="bg-void text-warm-white selection:bg-accent-base/30 selection:text-white">
+    <div className="bg-[#030303] text-warm-white selection:bg-accent-base/30 selection:text-white">
       {/* ── SECTION 1: CINEMATIC HERO ── */}
       <section className="relative w-full min-h-[70vh] flex flex-col justify-end overflow-hidden">
         {/* Background */}
@@ -47,10 +46,11 @@ export function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
         >
           {caseStudy.image ? (
             <>
-              <img 
+              <Image 
                 src={caseStudy.image} 
                 alt={caseStudy.title}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
               <div 
                 className="absolute inset-0 bg-gradient-to-t from-[#060508] via-[#060508]/60 to-transparent" 
@@ -76,7 +76,7 @@ export function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
             <FadeUp delay={0.1}>
               <Link 
                 href="/work" 
-                className="inline-block text-[13px] font-normal text-white/40 hover:text-warm-white transition-colors mb-8"
+                className="inline-block text-[13px] font-normal text-white/60 hover:text-warm-white transition-colors mb-8"
               >
                 ← Back to Use Cases
               </Link>
@@ -105,7 +105,7 @@ export function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
             </FadeUp>
 
             <FadeUp delay={0.4}>
-              <p className="font-sans italic text-white/40 mb-8" style={{ fontSize: 'clamp(18px, 2.5vw, 24px)' }}>
+              <p className="font-sans italic text-white/60 mb-8" style={{ fontSize: 'clamp(18px, 2.5vw, 24px)' }}>
                 {caseStudy.subtitle}
               </p>
             </FadeUp>
@@ -160,7 +160,7 @@ export function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
                     </span>
                   </div>
                   <h4 className="mt-2 text-[14px] font-bold text-nearWhite uppercase tracking-wider">{res.label}</h4>
-                  <p className="mt-1 text-[12px] text-white/30 uppercase tracking-widest">{res.detail}</p>
+                  <p className="mt-1 text-[12px] text-white/50 uppercase tracking-widest">{res.detail}</p>
                 </div>
               ))}
             </GlassPane>
@@ -209,7 +209,7 @@ export function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
             <ScrollReveal delay={0.4}>
               <blockquote className="mt-16 mb-16 pl-8 border-l-2 border-accent-base/20">
                 <p className="text-[20px] italic text-white/70 leading-[1.6]">
-                  "{caseStudy.challenge.pullQuote.text}"
+                  &ldquo;{caseStudy.challenge.pullQuote.text}&rdquo;
                 </p>
                 <footer className="mt-6">
                   <cite className="not-italic text-[11px] font-bold tracking-[0.2em] text-accent-base uppercase">
@@ -249,15 +249,15 @@ export function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
               <h2 className="text-[28px] md:text-[32px] font-bold text-warm-white tracking-tight leading-[1.2] mb-6">
                 Three disciplines, one connected system.
               </h2>
-              <p className="text-[17px] leading-[1.7] text-white/40">
-                We didn't hand over a logo and wish them luck. We rebuilt the entire digital identity as one integrated system — brand, product, and code working as a single organism.
+              <p className="text-[17px] leading-[1.7] text-white/60">
+                We didn&apos;t hand over a logo and wish them luck. We rebuilt the entire digital identity as one integrated system &mdash; brand, product, and code working as a single organism.
               </p>
             </ScrollReveal>
           </div>
 
           <StaggerGroup>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-              {caseStudy.approach.map((step, i) => (
+              {caseStudy.approach.map((step) => (
                 <GlassPane 
                   key={step.discipline}
                   hover
@@ -270,7 +270,7 @@ export function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
                   <h3 className="text-[20px] font-bold text-warm-white leading-tight mb-4">
                     {step.title}
                   </h3>
-                  <p className="text-[14px] leading-[1.7] text-white/40 mb-8 flex-grow">
+                  <p className="text-[14px] leading-[1.7] text-white/60 mb-8 flex-grow">
                     {step.body}
                   </p>
                   
@@ -278,7 +278,7 @@ export function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
                     {step.tags.map(tag => (
                       <span 
                         key={tag}
-                        className="px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/5 text-[9px] font-bold tracking-widest text-white/30 uppercase"
+                        className="px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/5 text-[9px] font-bold tracking-widest text-white/50 uppercase"
                       >
                         {tag}
                       </span>
@@ -446,8 +446,8 @@ export function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
               <h3 className="text-[20px] md:text-[24px] font-bold text-warm-white mb-4">
                 Recognise this problem in your business?
               </h3>
-              <p className="text-[15px] text-white/40 mb-10">
-                Let's talk about building something similar.
+              <p className="text-[15px] text-white/60 mb-10">
+                Let&apos;s talk about building something similar.
               </p>
               <Button 
                 href={`/contact?service=${caseStudy.disciplines[0].toLowerCase().replace(/\s+/g, '-')}`} 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-export interface HairlineProps {
+interface HairlineProps {
     gradient?: boolean;
     className?: string;
 }

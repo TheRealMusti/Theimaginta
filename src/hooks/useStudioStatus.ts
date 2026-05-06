@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-export type StudioStatus = 'online' | 'break' | 'offline';
+type StudioStatus = 'online' | 'break' | 'offline';
 
 export function useStudioStatus() {
     const [status, setStatus] = useState<StudioStatus>('offline');

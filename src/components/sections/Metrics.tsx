@@ -1,179 +1,140 @@
 'use client';
 
 import React from 'react';
-import { Container, Meta, InteractiveGlassPane, CountUpNumber } from '@/components/ui';
+import { motion } from 'framer-motion';
+import { Container, Meta, CountUpNumber, SectionAtmosphere } from '@/components/ui';
 import { ScrollReveal, FadeUp } from '@/components/motion';
-import { Briefcase, Users, CalendarDays, Zap, TrendingUp, Globe, Award, Sparkles } from 'lucide-react';
-import { COLORS, EASING } from '@/lib/constants';
+import { cn } from '@/lib/utils';
 
-interface Metric {
-    label: string;
-    subLabel: string;
-    value: string;
-    numValue: number | null; // null if not a simple countup (e.g. "<2")
-    suffix: string;
-    icon: React.ElementType;
-    color: string;
-    description: string;
-}
+/* ─────────────────────────── Data ─────────────────────────── */
 
-const metrics: Metric[] = [
+const METRICS = [
     { 
-        label: "Delivered Excellence", 
+        label: "Delivered", 
         subLabel: "Projects",
         value: "48", 
         numValue: 48,
         suffix: "+", 
-        icon: Briefcase, 
-        color: "from-amber-500/10 to-transparent",
-        description: "Bespoke digital solutions launched globally."
     },
     { 
-        label: "Client Loyalty", 
-        subLabel: "Retention rate",
+        label: "Retention", 
+        subLabel: "Client rate",
         value: "96", 
         numValue: 96,
         suffix: "%", 
-        icon: Users, 
-        color: "from-blue-500/10 to-transparent",
-        description: "Partnerships built on trust and longevity."
     },
     { 
-        label: "Market Reach", 
+        label: "Reach", 
         subLabel: "Countries",
         value: "14", 
         numValue: 14,
         suffix: "", 
-        icon: Globe, 
-        color: "from-emerald-500/10 to-transparent",
-        description: "Extending influence across borders."
     },
     { 
-        label: "Record Speed", 
+        label: "Velocity", 
         subLabel: "Response time",
-        value: "<2", 
-        numValue: null,
+        value: "1.5", 
+        numValue: 1.5,
         suffix: "hr", 
-        icon: Zap, 
-        color: "from-purple-500/10 to-transparent",
-        description: "Agility at the core of our operations."
     },
 ];
 
-function MetricCell({ metric, index }: { metric: Metric, index: number }) {
-    const Icon = metric.icon;
-    
-    return (
-        <FadeUp delay={0.1 + index * 0.1} className="w-full h-full">
-            <InteractiveGlassPane
-                className="h-full flex flex-col group border-white/[0.04] hover:border-white/[0.08]"
-                padding="40px"
-                radius={24}
-                dataCursor="EXPLORE"
-            >
-                {/* Background glow that reacts to group hover */}
-                <div 
-                    className={`absolute -bottom-24 -right-24 w-64 h-64 bg-gradient-to-br ${metric.color} opacity-0 group-hover:opacity-100 blur-[80px] transition-opacity duration-1000 pointer-events-none rounded-full`} 
-                />
-                
-                <div className="flex flex-col h-full relative z-10">
-                    {/* Top Row: Icon and Label */}
-                    <div className="flex items-start justify-between mb-12">
-                        <div className="flex flex-col gap-1">
-                            <Meta className="m-0 text-accent-base opacity-70 group-hover:opacity-100 transition-opacity duration-500">
-                                {metric.label}
-                            </Meta>
-                            <span className="text-[11px] font-medium tracking-[0.1em] uppercase text-white/45 group-hover:text-white/70 transition-colors duration-500">
-                                {metric.subLabel}
-                            </span>
-                        </div>
-                        <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.03] border border-white/[0.06] group-hover:bg-white/[0.08] group-hover:border-white/20 transition-all duration-500">
-                            <Icon size={18} className="text-white/55 group-hover:text-white transition-all duration-500" />
-                        </div>
-                    </div>
-                    
-                    {/* Middle Row: Massive Number */}
-                    <div className="flex items-baseline mb-6">
-                        <div className="text-[64px] font-semibold tracking-[-0.05em] leading-none text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-b group-hover:from-white group-hover:to-white/60 transition-all duration-700">
-                            {metric.numValue !== null ? (
-                                <CountUpNumber value={metric.numValue} decimals={0} />
-                            ) : (
-                                metric.value
-                            )}
-                        </div>
-                        <span className="text-[20px] font-medium text-white/45 ml-2 group-hover:text-accent-base/70 transition-colors duration-500">
-                            {metric.suffix}
-                        </span>
-                    </div>
+/* ─────────────────────────── Main Section ─────────────────────────── */
 
-                    {/* Bottom Row: Description */}
-                    <p className="mt-auto text-[14px] leading-relaxed text-white/60 group-hover:text-white/80 transition-colors duration-500 max-w-[200px]">
-                        {metric.description}
-                    </p>
-                    
-                    {/* Visual flourish: corner dot */}
-                    <div className="absolute bottom-0 right-0 w-1 h-1 rounded-full bg-white/5 group-hover:bg-accent-base/40 transition-colors duration-700" />
-                </div>
-            </InteractiveGlassPane>
-        </FadeUp>
-    );
-}
+export const Metrics = React.memo(function Metrics() {
 
-export function Metrics() {
     return (
-        <section aria-label="Key Performance Metrics" className="w-full relative py-[120px] md:py-[180px] overflow-hidden">
-            {/* Background elements */}
-            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/[0.03] to-transparent" />
-            
+        <section aria-label="Key Metrics" className="w-full relative py-32 md:py-48 overflow-hidden bg-[#030303]">
+            <SectionAtmosphere 
+                number="Metrics" 
+                glowColor="rgba(201, 166, 107, 0.01)"
+                glowPosition={{ top: '0%', right: '0%' }}
+                glowSize={800}
+                isHovered={false} 
+            />
+
             <Container className="relative z-10">
-                {/* Section Header */}
-                <div className="max-w-[700px] mb-20 md:mb-24">
+                {/* Minimalist Header */}
+                <div className="mb-24 md:mb-32">
                     <ScrollReveal>
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-8 h-px bg-accent-base/50" />
-                            <Meta className="m-0 text-accent-base/60 uppercase tracking-[0.3em]">Momentum</Meta>
-                        </div>
-                        <h2 className="text-[clamp(32px,5vw,56px)] font-semibold text-white tracking-[-0.04em] leading-[1.1] mb-8">
-                            Quantifiable excellence, 
-                            <span className="block text-white/50">unwavering consistency.</span>
+                        <Meta className="mb-4 text-accent-base/50 tracking-[0.3em]">METRICS</Meta>
+                        <h2 className="text-3xl md:text-5xl font-semibold text-white tracking-tight leading-tight max-w-2xl">
+                            Measuring success through <br />
+                            <span className="text-white/40">precision and delivery.</span>
                         </h2>
                     </ScrollReveal>
                 </div>
 
-                {/* Metrics Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                    {metrics.map((metric, idx) => (
-                        <MetricCell
+                {/* Symmetrical 4-Column Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                    {METRICS.map((metric, idx) => (
+                        <div 
                             key={metric.label}
-                            metric={metric}
-                            index={idx}
-                        />
+                            className={cn(
+                                "relative px-8 py-12 md:py-16 transition-all duration-700 group",
+                                // Vertical line dividers for desktop
+                                "border-b border-white/[0.03] sm:border-b-0",
+                                idx % 2 !== 0 && "sm:border-l sm:border-white/[0.03]",
+                                idx !== 0 && "lg:border-l lg:border-white/[0.03]",
+                                "hover:bg-white/[0.01]"
+                            )}
+                        >
+                            {/* Hover Active Line */}
+                            <motion.div 
+                                className="absolute left-0 top-0 w-[1px] h-0 bg-accent-base/40 group-hover:h-full transition-all duration-700 hidden lg:block"
+                            />
+
+                            <FadeUp delay={0.1 + idx * 0.05}>
+                                <div className="flex flex-col relative z-10">
+                                    {/* Metric ID */}
+                                    <span className="text-[9px] font-mono text-white/10 mb-8 tracking-[0.3em] uppercase group-hover:text-accent-base/30 transition-colors">
+                                        MT.IDX.0{idx + 1}
+                                    </span>
+
+                                    <div className="flex items-baseline mb-6 transition-all duration-700 group-hover:-translate-y-2">
+                                        <div className="relative">
+                                            <h3 className="text-6xl md:text-8xl font-semibold text-white tracking-tighter leading-none">
+                                                {metric.numValue !== null ? (
+                                                    <CountUpNumber value={metric.numValue} decimals={metric.numValue % 1 !== 0 ? 1 : 0} />
+                                                ) : (
+                                                    metric.value
+                                                )}
+                                            </h3>
+                                            {/* Radiance Glow */}
+                                            <div className="absolute inset-0 bg-accent-base/0 group-hover:bg-accent-base/10 blur-3xl rounded-full transition-all duration-1000 scale-0 group-hover:scale-100" />
+                                        </div>
+                                        <span className="text-2xl font-medium text-accent-base/40 ml-2 group-hover:text-accent-base transition-colors duration-500">
+                                            {metric.suffix}
+                                        </span>
+                                    </div>
+
+                                    <div className="flex flex-col gap-1.5 border-l border-white/[0.06] pl-4 group-hover:border-accent-base/20 transition-colors duration-700">
+                                        <span className="text-[13px] font-bold tracking-[0.25em] uppercase text-white/80 group-hover:text-white transition-colors">
+                                            {metric.label}
+                                        </span>
+                                        <span className="text-[11px] font-medium tracking-widest text-white/30 uppercase">
+                                            {metric.subLabel}
+                                        </span>
+                                    </div>
+                                </div>
+                            </FadeUp>
+                        </div>
                     ))}
                 </div>
-                
-                {/* Bottom decorative line */}
-                <ScrollReveal delay={0.4} className="mt-24 md:mt-32">
-                    <div className="flex items-center justify-between gap-8 border-t border-white/[0.04] pt-8">
-                        <div className="flex items-center gap-6 opacity-30 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-700 overflow-hidden">
-                            {/* Potential trust logos or simple tags */}
-                            <span className="text-[10px] font-bold tracking-[0.2em] uppercase whitespace-nowrap">Industry Standard</span>
-                            <div className="w-1 h-1 rounded-full bg-white/40" />
-                            <span className="text-[10px] font-bold tracking-[0.2em] uppercase whitespace-nowrap">Global Reach</span>
-                            <div className="w-1 h-1 rounded-full bg-white/40" />
-                            <span className="text-[10px] font-bold tracking-[0.2em] uppercase whitespace-nowrap">Premium Delivery</span>
-                        </div>
-                        <div className="hidden md:flex items-center gap-2">
-                             <Sparkles size={12} className="text-accent-base/40 animate-pulse" />
-                             <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/30 italic">Est. 2024</span>
+
+                {/* Subtle Trust Line */}
+                <ScrollReveal delay={0.4} className="mt-24 md:mt-40">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-6 border-t border-white/[0.05] pt-12">
+                        <p className="text-[11px] font-bold tracking-[0.2em] text-white/20 uppercase">
+                            Imaginta Digital Infrastructure &bull; Global Operations &bull; 2026
+                        </p>
+                        <div className="flex items-center gap-6">
+                            <span className="text-[11px] text-white/30 hover:text-white/60 transition-colors cursor-default">Archive.Idx.22</span>
+                            <span className="text-[11px] text-white/30 hover:text-white/60 transition-colors cursor-default">Verified Systems</span>
                         </div>
                     </div>
                 </ScrollReveal>
             </Container>
-            
-            {/* Large background decorative text or orb */}
-            <div className="absolute -bottom-[20%] -left-[10%] w-[600px] h-[600px] bg-accent-base/[0.02] blur-[120px] rounded-full pointer-events-none -z-10" />
-            <div className="absolute top-[10%] -right-[5%] w-[400px] h-[400px] bg-accent-base/[0.015] blur-[100px] rounded-full pointer-events-none -z-10" />
         </section>
     );
-}
-
+});

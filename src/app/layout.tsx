@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { instrumentSans } from '@/lib/fonts';
 import './globals.css';
-import { Nav, Footer } from '@/components/layout';
-import { GrainOverlay } from '@/components/ui';
+import { Nav, Footer } from '@/components/ui/layout';
+import { GrainOverlay, Preloader, HydrationSafe } from '@/components/ui';
 import { EasterEgg } from '@/components/ui/EasterEgg';
 import { CursorGlow } from '@/components/ui/CursorGlow';
 import { SmartCursor } from '@/components/ui/SmartCursor';
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   other: {
-    'theme-color': '#060508',
+    'theme-color': '#030303',
   },
 };
 
@@ -90,9 +90,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <HydrationSafe>
+          <Preloader />
+        </HydrationSafe>
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-4 focus:left-4 bg-accent-base text-black px-[24px] py-[12px] rounded-[50px] font-sans text-[14px] font-medium transition-transform"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-4 focus:left-4 bg-accent-base text-[#030303] px-[24px] py-[12px] rounded-[50px] font-sans text-[14px] font-medium transition-transform"
         >
           Skip to main content
         </a>

@@ -4,7 +4,7 @@ import React, { useState, useId } from 'react';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export interface FormFieldProps {
+interface FormFieldProps {
     label: string;
     id?: string;
     name: string;

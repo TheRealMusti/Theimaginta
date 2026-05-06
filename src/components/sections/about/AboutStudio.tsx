@@ -29,7 +29,7 @@ export function AboutStudio() {
                 {/* DESCRIPTION */}
                 <FadeUp delay={0.15} className="max-w-[520px] mx-auto mb-[48px] text-center">
                     <p className="font-sans text-[16px] font-normal text-white/[0.72] leading-[1.8]">
-                        We're based in Brussels — a city of quiet ambition. No Silicon Valley hype. No London agency ego. Just a studio in the heart of Europe, doing considered work for businesses that care about getting it right.
+                        We&apos;re based in Brussels — a city of quiet ambition. No Silicon Valley hype. No London agency ego. Just a studio in the heart of Europe, doing considered work for businesses that care about getting it right.
                     </p>
                 </FadeUp>
 

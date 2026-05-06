@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 export default function Loading() {
     return (
-        <main className="fixed inset-0 z-[100] bg-black flex items-center justify-center pointer-events-none">
+        <main className="fixed inset-0 z-[100] bg-[#030303] flex items-center justify-center pointer-events-none">
             <div className="flex flex-col items-center gap-3">
                 <span className="font-sans text-[14px] font-medium tracking-wide text-white/40 select-none">
                     Imaginta

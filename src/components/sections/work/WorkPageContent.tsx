@@ -4,12 +4,10 @@ import React from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'framer-motion';
-import { Dumbbell, UtensilsCrossed, Cloud, ShoppingBag, Building2, Brain, Layers, Car, Sparkles, Flame } from 'lucide-react';
+import { Dumbbell, UtensilsCrossed, Building2, Brain, Layers, Car, Sparkles, Flame } from 'lucide-react';
 import { Container, Meta, Button, GlassPane } from '@/components/ui';
 import { ScaleReveal } from '@/components/motion/ScaleReveal';
 import { ScrollReveal } from '@/components/motion/ScrollReveal';
-import { FadeUp } from '@/components/motion/FadeUp';
-import { EASING } from '@/lib/constants';
 import { FilterBar } from './FilterBar';
 import { UseCaseCard } from './UseCaseCard';
 import type { UseCaseData } from './UseCaseCard';
@@ -316,7 +314,7 @@ export default function WorkPageContent() {
     const casesY = useTransform(scrollY, [0, 3000], [0, 180]);
 
     return (
-        <main id="main" className="relative min-h-screen overflow-hidden bg-void">
+        <main id="main" className="relative min-h-screen overflow-hidden bg-[#030303]">
             {/* ── TOP WARM WASH ── */}
             <div
                 className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[800px] pointer-events-none z-0"
@@ -353,7 +351,7 @@ export default function WorkPageContent() {
                         <span className="italic text-white/50">right partner shows up.</span>
                     </h1>
 
-                    <p className="mt-[24px] font-sans text-[18px] leading-[1.6] text-white/40 max-w-[520px]">
+                    <p className="mt-[24px] font-sans text-[18px] leading-[1.6] text-white/60 max-w-[520px]">
                         These aren&apos;t portfolio pieces. They&apos;re business problems we&apos;ve
                         solved — the kind you might be facing right now.
                     </p>
@@ -370,7 +368,7 @@ export default function WorkPageContent() {
             <Container className="pb-[120px] relative z-10">
                 <div className="flex flex-col gap-[64px]">
                     <AnimatePresence mode="popLayout" initial={false}>
-                        {filteredCases.map((uc, i) => (
+                        {filteredCases.map((uc) => (
                             <motion.div
                                 key={uc.slug}
                                 layout={!prefersReducedMotion}
@@ -418,7 +416,7 @@ export default function WorkPageContent() {
                         <h2 className="text-[clamp(28px,4vw,42px)] font-bold tracking-tight text-white relative z-10">
                             Recognise your situation?
                         </h2>
-                        <p className="mt-6 text-[18px] text-white/40 max-w-[480px] mx-auto relative z-10">
+                        <p className="mt-6 text-[18px] text-white/60 max-w-[480px] mx-auto relative z-10">
                             Every success story above started with a single conversation. 
                             Let&apos;s talk about yours.
                         </p>

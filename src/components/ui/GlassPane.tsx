@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useMousePosition } from '@/hooks/useMousePosition';
 
-export interface GlassPaneProps {
+export interface GlassPaneProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
     className?: string;
     hover?: boolean;
@@ -20,6 +20,7 @@ export function GlassPane({
     padding,
     radius,
     interactive = false,
+    ...props
 }: GlassPaneProps) {
     const paneRef = React.useRef<HTMLDivElement>(null);
     const [isHovered, setIsHovered] = React.useState(false);
@@ -37,8 +38,15 @@ export function GlassPane({
     return (
         <div
             ref={paneRef}
-            onMouseEnter={() => interactive && setIsHovered(true)}
-            onMouseLeave={() => interactive && setIsHovered(false)}
+            {...props}
+            onMouseEnter={(e) => {
+                if (interactive) setIsHovered(true);
+                props.onMouseEnter?.(e);
+            }}
+            onMouseLeave={(e) => {
+                if (interactive) setIsHovered(false);
+                props.onMouseLeave?.(e);
+            }}
             className={cn(
                 'relative bg-white/[0.02] backdrop-blur-glass border-[0.5px] border-white/[0.06] overflow-hidden',
                 'transition-all duration-400 ease-smooth',
@@ -56,7 +64,8 @@ export function GlassPane({
                     style={{
                         opacity: isHovered ? 1 : 0,
                         transition: 'opacity 0.6s ease',
-                        background: 'radial-gradient(300px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(201,166,107, 0.06), transparent 70%)',
+                        background: 'radial-gradient(300px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(201,166,107, 0.06) 0%, rgba(201,166,107, 0.01) 40%, transparent 80%)',
+                        mixBlendMode: 'luminosity'
                     }}
                 />
             )}

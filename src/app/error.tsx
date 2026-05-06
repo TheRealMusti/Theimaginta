@@ -15,7 +15,7 @@ export default function ErrorPage({
     }, [error]);
 
     return (
-        <main className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
+        <main className="min-h-screen bg-[#030303] flex items-center justify-center relative overflow-hidden">
             <Container className="flex flex-col items-center justify-center text-center z-10 relative">
                 <span className="font-sans text-[clamp(80px,15vw,180px)] font-bold leading-none text-white/[0.05] select-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 blur-[2px] whitespace-nowrap">
                     ERROR
