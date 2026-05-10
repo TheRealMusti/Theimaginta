@@ -1,304 +1,323 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
-import {
-    motion,
-    AnimatePresence,
-} from 'framer-motion';
-import { Container, Meta, InteractiveGlassPane, SectionAtmosphere } from '@/components/ui';
-import { ScrollReveal } from '@/components/motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Container, Meta, HydrationSafe, GrainOverlay, GlassPane } from '@/components/ui';
 import { cn } from '@/lib/utils';
-import { EASING } from '@/lib/constants';
+import { ArrowUpRight, Activity, Zap, Layers, Cpu } from 'lucide-react';
+import { ScrollReveal } from '@/components/motion';
 
-/* ─────────────────────────── Phase Data ─────────────────────────── */
+/* ─────────────────────────── Protocol Data ─────────────────────────── */
 
-interface PhaseData {
-    id: string;
-    number: string;
-    name: string;
-    title: string;
-    description: string;
-    duration: string;
-    team: string;
-    deliverables: string[];
-    technicalId: string;
-}
-
-const PHASES: PhaseData[] = [
-    {
-        id: 'discovery',
-        number: '01',
-        name: 'Discovery',
-        technicalId: 'OP.SYN.DISC',
-        title: 'Listen before we design.',
-        description:
-            'Every project starts with deep-immersion research. We analyze your business, your audience, and the unique competitive landscape to identify the single problem worth solving.',
-        duration: '1–2 weeks',
-        team: 'Strategist + Lead',
-        deliverables: [
-            'Research & Insights Report',
-            'Competitive Matrix',
-            'Success Metric Definition',
-            'Stakeholder Alignment',
-        ],
-    },
-    {
-        id: 'design',
-        number: '02',
-        name: 'Design',
-        technicalId: 'OP.SYN.VISU',
-        title: 'Visualizing authority.',
-        description:
-            'Strategy becomes tangible. We develop high-fidelity brand identities and interactive prototypes, ensuring every pixel aligns with your market position before development.',
-        duration: '2–4 weeks',
-        team: 'Lead Designer + Art Director',
-        deliverables: [
-            'Brand Identity System',
-            'High-Fidelity UI Screens',
-            'Motion Choreography',
-            'Interactive Prototype',
-        ],
-    },
-    {
-        id: 'build',
-        number: '03',
-        name: 'Build',
-        technicalId: 'OP.SYN.DEVR',
-        title: 'Precision engineering.',
-        description:
-            'Tight sprint cycles with Friday demos. We build with a focus on performance, accessibility, and architectural cleanlines, delivering working software weekly.',
-        duration: '4–12 weeks',
-        team: 'Engineer + UI Specialist',
-        deliverables: [
-            'Performant Frontend Core',
-            'Headless CMS Integration',
-            'Edge Deployment Config',
-            'Quality Assurance Suite',
-        ],
-    },
-    {
-        id: 'launch',
-        number: '04',
-        name: 'Launch',
-        technicalId: 'OP.SYN.DPY',
-        title: 'Stable deployment.',
-        description:
-            'We handle the transition—DNS, infrastructure, and real-time monitoring. Post-launch, we remain embedded for continuous performance optimization.',
-        duration: '1–2 weeks',
-        team: 'Deployment Squad',
-        deliverables: [
-            'Global Edge Deployment',
-            'Infrastructure Monitoring',
-            'Analytics Integration',
-            'Retainer Roadmap',
-        ],
-    },
+const STEPS = [
+  {
+    id: 'understanding',
+    number: '01',
+    name: 'Listen & Learn',
+    title: 'Begin with Empathy',
+    description: 'We start by understanding your world. Before we design, we listen to your challenges, your dreams, and the people you serve.',
+    color: '#C9A66B',
+    icon: Activity,
+    metric: "100%_ALIGNMENT"
+  },
+  {
+    id: 'vision',
+    number: '02',
+    name: 'Strategy & Soul',
+    title: 'Defining the Essence',
+    description: 'Together, we uncover the heart of your brand. We build a strategic foundation that feels authentic and deeply resonant.',
+    color: '#D4C4A8',
+    icon: Cpu,
+    metric: "CORE_EXTRACTION"
+  },
+  {
+    id: 'creation',
+    number: '03',
+    name: 'Craft & Care',
+    title: 'Bringing it to Life',
+    description: 'Our craft is a labor of love. We build every detail with a focus on beauty, performance, and the human experience.',
+    color: '#8B9DA4',
+    icon: Layers,
+    metric: "LUXURY_PRECISION"
+  },
+  {
+    id: 'nurture',
+    number: '04',
+    name: 'Grow & Guide',
+    title: 'A Lasting Partnership',
+    description: 'Launch day is just the beginning. We stay by your side, nurturing your growth and evolving your vision over time.',
+    color: '#F5F2ED',
+    icon: Zap,
+    metric: "FUTURE_SCALE"
+  }
 ];
 
-/* ─────────────────────────── Main Component ─────────────────────────── */
+const LOOP_DURATION = 7000; // 7 seconds per phase
+
+/* ─────────────────────────── Main Section ─────────────────────────── */
 
 export function Process() {
-    const [activeIdx, setActiveIdx] = useState(0);
-    const sectionRef = useRef<HTMLElement>(null);
+  const [activeStep, setActiveStep] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
-    const activePhase = PHASES[activeIdx];
+  useEffect(() => {
+    if (isHovered) return;
 
-    return (
-        <section
-            ref={sectionRef}
-            id="process"
-            className="relative w-full py-32 md:py-48 overflow-hidden bg-[#030303]"
-        >
-            {/* ════ BACKGROUND ATMOSPHERE ════ */}
-            <div className="absolute inset-0 pointer-events-none">
-                <SectionAtmosphere 
-                    number="Process" 
-                    glowColor="rgba(201, 166, 107, 0.015)"
-                    glowPosition={{ top: '10%', right: '10%' }}
-                    glowSize={1200}
-                    isHovered={false} 
-                />
-                {/* Architectural Grid Overlay */}
-                <div className="absolute inset-0 opacity-[0.03]" 
-                    style={{ 
-                        backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)`,
-                        backgroundSize: '40px 40px'
-                    }}
-                />
+    const startTime = Date.now();
+    const timer = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const currentProgress = (elapsed % LOOP_DURATION) / LOOP_DURATION * 100;
+      setProgress(currentProgress);
+
+      if (elapsed >= LOOP_DURATION) {
+        // Reset and move to next
+        setActiveStep((prev) => (prev + 1) % STEPS.length);
+      }
+    }, 16);
+
+    return () => clearInterval(timer);
+  }, [activeStep, isHovered]);
+
+  const handleManualSelect = (index: number) => {
+    setActiveStep(index);
+    setProgress(0);
+  };
+
+  return (
+    <section 
+      id="process" 
+      className="relative w-full h-[80vh] min-h-[600px] max-h-[900px] bg-transparent overflow-hidden flex items-center"
+    >
+      {/* ════ CLEAN TEXTURED BACKGROUND ════ */}
+      <GrainOverlay opacity={0.012} />
+      
+      {/* Subtle Hairline Dividers for 'Vault' feel */}
+      <div className="absolute inset-0 pointer-events-none opacity-20">
+        <div className="absolute left-[8%] h-full w-px bg-white/5" />
+        <div className="absolute right-[8%] h-full w-px bg-white/5" />
+      </div>
+
+      <Container className="relative z-10 h-full flex flex-col justify-center py-12">
+        <ScrollReveal className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center h-full max-h-[600px]">
+          
+          {/* ════ LEFT: PROTOCOL NAVIGATION (5 COLS) ════ */}
+          <div className="lg:col-span-5 flex flex-col justify-between h-full py-4">
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-prestige" />
+                  <Meta className="meta-text meta-amber tracking-[0.3em]">Operational_Sequence</Meta>
+                </div>
+                <h2 className="section-h2 text-white uppercase leading-none">
+                  A Precise <br />
+                  <span className="text-white/40 font-serif italic lowercase tracking-tight font-normal">methodology.</span>
+                </h2>
+              </div>
+
+              <div className="space-y-2">
+                {STEPS.map((step, idx) => (
+                  <ProtocolItem 
+                    key={step.id}
+                    step={step}
+                    isActive={activeStep === idx}
+                    progress={activeStep === idx ? progress : 0}
+                    onClick={() => handleManualSelect(idx)}
+                    onHover={() => setIsHovered(true)}
+                    onLeave={() => setIsHovered(false)}
+                  />
+                ))}
+              </div>
             </div>
 
-            <Container className="relative z-10">
-                {/* ════ HEADER ════ */}
-                <ScrollReveal>
-                    <header className="mb-24 md:mb-32">
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="w-12 h-px bg-accent-base/40" />
-                            <Meta className="m-0 text-accent-base uppercase tracking-[0.4em] font-bold text-[10px]">OPERATIONAL_SEQUENCE</Meta>
-                        </div>
-                        <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-white leading-[1] max-w-3xl">
-                            A systematic approach to <br />
-                            <span className="text-white/20 font-serif italic text-3xl md:text-5xl">exceptional performance.</span>
-                        </h2>
-                    </header>
-                </ScrollReveal>
+            {/* Bottom Status */}
+            <div className="hidden lg:flex items-center gap-4 text-[9px] font-mono tracking-widest text-white/10 uppercase">
+              <span>System_Ready</span>
+              <div className="w-1 h-1 rounded-full bg-white/10" />
+              <span>Buffer_0{activeStep + 1}</span>
+            </div>
+          </div>
 
-                {/* ════ MAIN COMMAND INTERFACE ════ */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-                    
-                    {/* LEFT: PHASE SELECTOR */}
-                    <div className="lg:col-span-4 flex flex-col gap-4">
-                        {PHASES.map((phase, idx) => (
-                            <button
-                                 key={phase.id}
-                                onClick={() => setActiveIdx(idx)}
-                                className={cn(
-                                    "group relative text-left p-6 rounded-2xl transition-all duration-700",
-                                    activeIdx === idx ? "bg-white/[0.03] border-white/[0.08]" : "hover:bg-white/[0.01] border-transparent"
-                                )}
-                            >
-                                <div className="flex items-center gap-6">
-                                    <span className={cn(
-                                        "text-[10px] font-mono transition-colors duration-500",
-                                        activeIdx === idx ? "text-accent-base" : "text-white/20"
-                                    )}>
-                                        {phase.number}
-                                    </span>
-                                    <div className="flex flex-col">
-                                        <h3 className={cn(
-                                            "text-xl font-bold tracking-tight transition-colors duration-500",
-                                            activeIdx === idx ? "text-white" : "text-white/40"
-                                        )}>
-                                            {phase.name}
-                                        </h3>
-                                        <span className="text-[9px] font-mono tracking-[0.2em] text-white/10 uppercase mt-1">
-                                            {phase.technicalId}
-                                        </span>
-                                    </div>
-                                </div>
-                                
-                                {/* Active Indicator Bar */}
-                                {activeIdx === idx && (
-                                    <motion.div 
-                                        layoutId="activeIndicator"
-                                        className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-8 bg-accent-base"
-                                    />
-                                )}
-                            </button>
-                        ))}
+          {/* ════ RIGHT: VISUAL CHAMBER (7 COLS) ════ */}
+          <div className="lg:col-span-7 h-full relative group">
+            <AnimatePresence mode="wait">
+              <motion.div 
+                key={activeStep}
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.02 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full h-full"
+              >
+                <GlassPane
+                  plane={2}
+                  radius={24}
+                  className="h-full p-8 md:p-12 lg:p-16 flex flex-col justify-between overflow-hidden"
+                >
+                  {/* Premium Layered Background Number - Plane 3 (RECEDED) */}
+                  <motion.div 
+                    initial={{ opacity: 0, x: 40 }}
+                    animate={{ opacity: 0.05, x: 0 }}
+                    transition={{ delay: 0.2, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute top-0 right-0 p-8 select-none"
+                  >
+                    <span className="text-[12rem] font-serif italic leading-none text-white">
+                      {STEPS[activeStep].number}
+                    </span>
+                  </motion.div>
+
+                  <div className="space-y-12 relative z-10">
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 }}
+                      className="flex items-center gap-4"
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-center text-prestige shadow-[0_0_20px_rgba(201,166,107,0.1)]">
+                        {React.createElement(STEPS[activeStep].icon, { size: 24, strokeWidth: 1.5 })}
+                      </div>
+                      <div className="h-px w-12 bg-white/10" />
+                      <Meta className="meta-text text-white/20 tracking-[0.2em]">{STEPS[activeStep].metric}</Meta>
+                    </motion.div>
+
+                    <div className="space-y-6">
+                      <motion.h3 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white/95 leading-[1.1]"
+                      >
+                        {STEPS[activeStep].title}
+                      </motion.h3>
+                      <motion.p 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="body-text !max-w-xl text-white/50"
+                      >
+                        {STEPS[activeStep].description}
+                      </motion.p>
                     </div>
+                  </div>
 
-                    {/* RIGHT: CINEMATIC DETAIL PANEL */}
-                    <div className="lg:col-span-8 relative">
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={activeIdx}
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                transition={{ duration: 0.8, ease: EASING.smoothArray }}
-                                className="relative w-full h-full"
-                            >
-                                <InteractiveGlassPane 
-                                    padding="48px" 
-                                    radius={40} 
-                                    className="bg-white/[0.01] border-white/[0.05] overflow-hidden"
-                                >
-                                    {/* Blueprint Background Decor */}
-                                    <div className="absolute -top-20 -right-20 opacity-[0.02] pointer-events-none">
-                                        <div className="w-80 h-80 border border-white rounded-full flex items-center justify-center">
-                                            <div className="w-64 h-64 border border-white rounded-full flex items-center justify-center">
-                                                <div className="w-48 h-48 border border-white rounded-full" />
-                                            </div>
-                                        </div>
-                                    </div>
+                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pt-12 relative z-10">
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.4 }}
+                      className="flex items-center gap-4"
+                    >
+                      <div className="w-1 h-1 rounded-full bg-prestige shadow-[0_0_8px_#C9A66B]" />
+                      <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-white/30">Protocol_Engaged</span>
+                    </motion.div>
 
-                                    <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
-                                        <div className="flex flex-col">
-                                            <div className="flex items-center gap-3 mb-6">
-                                                <span className="px-3 py-1 rounded-full bg-accent-base/10 border border-accent-base/20 text-[10px] font-bold text-accent-base tracking-widest uppercase">
-                                                    PHASE_{activePhase.number}
-                                                </span>
-                                                <div className="h-px flex-1 bg-white/[0.05]" />
-                                            </div>
+                    <GlassPane 
+                      plane={3} 
+                      padding="0" 
+                      radius={999}
+                      hover={true}
+                    >
+                      <motion.button 
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className="group flex items-center gap-4 px-6 py-3 transition-all duration-500"
+                      >
+                        <span className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/60 group-hover:text-white">Expand_Phase</span>
+                        <ArrowUpRight size={14} className="text-prestige group-hover:rotate-45 transition-transform" />
+                      </motion.button>
+                    </GlassPane>
+                  </div>
+                </GlassPane>
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-                                            <h3 className="text-3xl md:text-4xl font-bold text-white tracking-tighter mb-8 leading-tight">
-                                                {activePhase.title}
-                                            </h3>
-
-                                            <p className="text-lg text-white/40 leading-relaxed font-light mb-12">
-                                                {activePhase.description}
-                                            </p>
-
-                                            <div className="grid grid-cols-2 gap-8 pt-8 border-t border-white/[0.05]">
-                                                <TechnicalStat label="EST_DURATION" value={activePhase.duration} />
-                                                <TechnicalStat label="TEAM_UNIT" value={activePhase.team} />
-                                            </div>
-                                        </div>
-
-                                        <div className="flex flex-col">
-                                            <div className="p-8 rounded-[32px] bg-white/[0.02] border border-white/[0.05] relative overflow-hidden">
-                                                {/* Deliverables Header */}
-                                                <div className="flex items-center justify-between mb-8">
-                                                    <span className="text-[10px] font-bold tracking-[0.3em] text-white/30 uppercase">Deliverables</span>
-                                                    <div className="flex gap-1">
-                                                        <div className="w-1 h-1 rounded-full bg-emerald-500/40" />
-                                                        <div className="w-1 h-1 rounded-full bg-white/10" />
-                                                        <div className="w-1 h-1 rounded-full bg-white/10" />
-                                                    </div>
-                                                </div>
-
-                                                <ul className="space-y-6">
-                                                    {activePhase.deliverables.map((item, i) => (
-                                                        <li key={i} className="flex items-start gap-4 group/item">
-                                                            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-accent-base group-hover/item:scale-150 transition-transform duration-500 shadow-[0_0_8px_rgba(201,166,107,0.5)]" />
-                                                            <span className="text-[15px] text-white/60 font-medium tracking-tight group-hover/item:text-white transition-colors">
-                                                                {item}
-                                                            </span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-
-                                                {/* System Verification Decor */}
-                                                <div className="absolute bottom-6 right-6 flex items-center gap-2 opacity-20">
-                                                    <span className="text-[9px] font-mono text-white tracking-widest uppercase">SYSTM_VERIFIED</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </InteractiveGlassPane>
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
-                </div>
-
-                {/* ════ FOOTER STATUS ════ */}
-                <div className="mt-24 pt-12 border-t border-white/[0.05] flex flex-col md:flex-row items-center justify-between gap-8 opacity-40">
-                    <div className="flex items-center gap-8">
-                        <div className="flex flex-col">
-                            <span className="text-[8px] font-mono tracking-widest uppercase">Synchronicity</span>
-                            <span className="text-[10px] font-bold text-white uppercase">99.8% Efficient</span>
-                        </div>
-                        <div className="w-px h-6 bg-white/[0.1]" />
-                        <div className="flex flex-col">
-                            <span className="text-[8px] font-mono tracking-widest uppercase">Latency</span>
-                            <span className="text-[10px] font-bold text-white uppercase">Zero Tolerance</span>
-                        </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-4">
-                        <span className="text-[9px] font-mono tracking-[0.4em] uppercase">IMAGINTA_OPERATIONAL_FRAMEWORK</span>
-                    </div>
-                </div>
-            </Container>
-        </section>
-    );
+        </ScrollReveal>
+      </Container>
+    </section>
+  );
 }
 
-function TechnicalStat({ label, value }: { label: string; value: string }) {
-    return (
-        <div className="flex flex-col gap-1.5">
-            <span className="text-[9px] font-bold tracking-[0.2em] text-white/20 uppercase font-mono">{label}</span>
-            <span className="text-[14px] font-bold text-white/70 uppercase tracking-tight">{value}</span>
+/* ─────────────────────────── Sub-Components ─────────────────────────── */
+
+interface ProtocolItemProps {
+  step: typeof STEPS[0];
+  isActive: boolean;
+  progress: number;
+  onClick: () => void;
+  onHover: () => void;
+  onLeave: () => void;
+}
+
+function ProtocolItem({ step, isActive, progress, onClick, onHover, onLeave }: ProtocolItemProps) {
+  return (
+    <GlassPane
+      plane={isActive ? 2 : 3}
+      noBlur={true}
+      padding="0"
+      radius={16}
+      className={cn(
+        "transition-all duration-700 text-left overflow-hidden",
+        isActive ? "z-10" : "z-0 opacity-40 hover:opacity-100"
+      )}
+    >
+      <button
+        onClick={onClick}
+        onMouseEnter={onHover}
+        onMouseLeave={onLeave}
+        className="relative w-full p-6 text-left"
+      >
+        <div className="flex items-center gap-6 relative z-10">
+          {/* Step Number with Progress Ring */}
+          <div className="relative w-10 h-10 flex items-center justify-center shrink-0">
+            <svg className="absolute inset-0 w-full h-full -rotate-90">
+              <circle 
+                cx="20" cy="20" r="18" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="0.5" 
+                className="text-white/5"
+              />
+              {isActive && (
+                <motion.circle 
+                  cx="20" cy="20" r="18" 
+                  fill="none" 
+                  stroke="#C9A66B" 
+                  strokeWidth="1.5"
+                  strokeDasharray="113"
+                  strokeDashoffset={113 - (113 * progress) / 100}
+                  className="text-prestige"
+                />
+              )}
+            </svg>
+            <span className={cn(
+              "text-[10px] font-mono transition-colors duration-500",
+              isActive ? "text-prestige" : "text-white/20 group-hover:text-white/40"
+            )}>
+              {step.number}
+            </span>
+          </div>
+
+          <div className="space-y-1">
+            <span className={cn(
+              "text-[11px] font-bold tracking-[0.2em] uppercase transition-colors duration-500",
+              isActive ? "text-white" : "text-white/30 group-hover:text-white/60"
+            )}>
+              {step.name}
+            </span>
+            {isActive && (
+              <motion.p 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="text-[12px] text-white/40 leading-relaxed max-w-xs"
+              >
+                {step.title}
+              </motion.p>
+            )}
+          </div>
         </div>
-    );
+      </button>
+    </GlassPane>
+  );
 }

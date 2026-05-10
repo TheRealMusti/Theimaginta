@@ -8,15 +8,15 @@ import React, { useState, useEffect } from 'react';
  * browser-only APIs or non-deterministic data (like Math.random or current time).
  */
 export function HydrationSafe({ children, fallback = null }: { children: React.ReactNode; fallback?: React.ReactNode }) {
-    const [mounted, setMounted] = useState(false);
+ const [mounted, setMounted] = useState(false);
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+ useEffect(() => {
+ setMounted(true);
+ }, []);
 
-    if (!mounted) {
-        return <>{fallback}</>;
-    }
+ if (!mounted) {
+ return <>{fallback}</>;
+ }
 
-    return <>{children}</>;
+ return <>{children}</>;
 }

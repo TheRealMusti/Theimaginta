@@ -1,205 +1,192 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import { 
-    Container, 
-    Meta, 
-    InteractiveGlassPane, 
-    SectionAtmosphere
+  Container, 
+  Meta, 
+  GrainOverlay,
+  GlassPane
 } from '@/components/ui';
-import { ScrollReveal, StaggerGroup, StaggerItem } from '@/components/motion';
+import { ScrollReveal, FadeUp } from '@/components/motion';
 import { 
-    Award, 
-    Monitor, 
-    BrainCircuit, 
-    ArrowUpRight,
-    Sparkles
+  Palette, 
+  Layout, 
+  Bot, 
+  ArrowUpRight,
+  CheckCircle2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+/* ─────────────────────────── Data ─────────────────────────── */
+
 const SERVICES = [
-    {
-        id: "01",
-        title: "Strategic Architecture & Identity",
-        category: "Creative Strategy",
-        description: "Designing the fundamental DNA of brands through rigorous strategy, architectural vision, and iconic visual systems that command market authority.",
-        deliverables: ["Visual Identity", "Brand Positioning", "Strategic DNA"],
-        icon: Award,
-    },
-    {
-        id: "02",
-        title: "Digital Product Engineering",
-        category: "User Experience",
-        description: "Bespoke digital ecosystems and consumer platforms built with technical precision, operational clarity, and scalable performance architecture.",
-        deliverables: ["UI/UX Systems", "React/Next.js", "Performance Ops"],
-        icon: Monitor,
-    },
-    {
-        id: "03",
-        title: "Applied Intelligence & Automations",
-        category: "Automation",
-        description: "Embedding custom AI workflows and neural pipelines that solve deep business bottlenecks and drive competitive, sentient efficiency.",
-        deliverables: ["AI Pipelines", "LLM Systems", "Workflow Logic"],
-        icon: BrainCircuit,
-    }
+  {
+    id: "01",
+    title: "Brand Strategy & Design",
+    category: "Identity",
+    description: "We help you tell a story that people remember. It’s about more than just a logo—it’s about building trust and making sure your brand feels premium at every touchpoint.",
+    deliverables: ["Visual Identity", "Brand Story", "Creative Direction"],
+    icon: Palette,
+    isPrestige: true
+  },
+  {
+    id: "02",
+    title: "Web & App Development",
+    category: "Digital",
+    description: "We build fast, beautiful websites that work perfectly on every screen. Our focus is on creating smooth experiences that make it easy for your customers to take action.",
+    deliverables: ["Responsive Sites", "Mobile Apps", "E-commerce"],
+    icon: Layout,
+    isPrestige: false
+  },
+  {
+    id: "03",
+    title: "AI & Smart Automation",
+    category: "Productivity",
+    description: "We use smart tools to handle repetitive tasks, giving you more time for the work that matters. It’s like having an extra team that never sleeps, working to keep you ahead.",
+    deliverables: ["AI Tools", "Task Automation", "Workflow Support"],
+    icon: Bot,
+    isPrestige: true
+  }
 ];
 
-function ServiceCard({ service, index }: { service: typeof SERVICES[0], index: number }) {
-    const Icon = service.icon;
-    const [isHovered, setIsHovered] = React.useState(false);
-    
-    return (
-        <StaggerItem className="h-full">
-            <InteractiveGlassPane
-                className={cn(
-                    "h-full flex flex-col group border-white/[0.04] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] bg-white/[0.01]",
-                    "hover:bg-white/[0.02] hover:border-accent-base/30 hover:shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
-                )}
-                padding="0"
-                radius={32}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-            >
-                <div className="relative z-10 flex flex-col h-full p-10 md:p-14">
-                    {/* ID & Background Watermark */}
-                    <div className="absolute top-10 right-10 overflow-hidden pointer-events-none">
-                        <span className="text-[64px] font-mono font-bold text-white/[0.02] transition-all duration-1000 group-hover:text-accent-base/[0.05] group-hover:translate-y-[-10px] block leading-none">
-                            0{index + 1}
-                        </span>
-                    </div>
-
-                    {/* Scan Line Effect */}
-                    <motion.div 
-                        className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-accent-base/30 to-transparent z-20 pointer-events-none"
-                        initial={{ top: '-10%' }}
-                        animate={isHovered ? { top: '110%' } : { top: '-10%' }}
-                        transition={{ duration: 2, ease: "linear", repeat: isHovered ? Infinity : 0 }}
-                    />
-
-                    {/* Header: Category & Icon */}
-                    <div className="flex items-start justify-between mb-16">
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 rounded-full bg-accent-base shadow-[0_0_8px_rgba(201,166,107,0.8)]" />
-                                <Meta className="m-0 text-accent-base/60 uppercase tracking-[0.3em] text-[10px] font-bold">
-                                    {service.category}
-                                </Meta>
-                            </div>
-                            <h3 className="text-3xl md:text-4xl font-semibold text-white tracking-tight leading-[1.05] max-w-[280px]">
-                                {service.title}
-                            </h3>
-                        </div>
-                        <div className="relative">
-                            <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-white/[0.03] border border-white/[0.08] group-hover:border-accent-base/40 transition-all duration-700 overflow-hidden">
-                                <Icon size={28} className="text-white/40 group-hover:text-accent-base transition-all duration-700 group-hover:scale-110 z-10" />
-                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(201,166,107,0.1)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Description Section with Indented Border */}
-                    <div className="mb-14 relative pl-8 border-l border-white/[0.05] group-hover:border-accent-base/20 transition-colors duration-700 flex-grow">
-                        <p className="text-[17px] leading-relaxed text-white/40 group-hover:text-white/70 transition-all duration-700 font-light">
-                            {service.description}
-                        </p>
-                    </div>
-
-                    {/* Detailed Deliverables List */}
-                    <div className="mt-auto space-y-8">
-                        <div className="flex items-center gap-4">
-                            <span className="text-[9px] font-mono text-white/20 uppercase tracking-[0.4em]">Deliverables</span>
-                            <div className="h-px flex-grow bg-gradient-to-r from-white/[0.1] to-transparent" />
-                        </div>
-                        <div className="flex flex-wrap gap-x-10 gap-y-4">
-                            {service.deliverables.map((item, i) => (
-                                <div key={i} className="flex flex-col gap-1 group/item">
-                                    <span className="text-[12px] font-bold text-white/60 group-hover:text-white transition-colors">
-                                        {item}
-                                    </span>
-                                    <div className="w-0 h-[1px] bg-accent-base/40 transition-all duration-500 group-hover:w-full" />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    
-                    {/* Footer Reveal Action */}
-                    <div className="absolute bottom-10 right-10 flex items-center gap-4 opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-700 ease-smooth">
-                        <span className="text-[10px] font-bold tracking-[0.2em] text-accent-base uppercase">Explore Depth</span>
-                        <div className="w-12 h-12 rounded-full border border-accent-base/20 flex items-center justify-center bg-accent-base/5 backdrop-blur-md">
-                            <ArrowUpRight size={20} className="text-accent-base" />
-                        </div>
-                    </div>
-                </div>
-                
-                {/* Advanced Atmosphere Layers */}
-                <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                    <div className="absolute top-0 right-0 w-[60%] h-[60%] bg-[radial-gradient(circle_at_top_right,rgba(201,166,107,0.04)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                    <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-[radial-gradient(circle_at_bottom_left,rgba(201,166,107,0.02)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                </div>
-            </InteractiveGlassPane>
-        </StaggerItem>
-    );
-}
+/* ─────────────────────────── Main Section ─────────────────────────── */
 
 export function Services() {
-    return (
-        <section id="services" aria-label="Expertise" className="w-full relative py-24 md:py-48 overflow-hidden bg-[#030303]">
-            <SectionAtmosphere 
-                number="Expertise" 
-                glowColor="rgba(201, 166, 107, 0.01)"
-                glowPosition={{ top: '0%', right: '0%' }}
-                glowSize={1000}
-                isHovered={false} 
+  return (
+    <section id="services" className="relative w-full bg-transparent pt-8 sm:pt-10 md:pt-[56px] lg:pt-20 pb-12 sm:pb-14 md:pb-[72px] lg:pb-24 overflow-hidden">
+      <GrainOverlay opacity={0.012} />
+      
+      <Container className="relative z-10">
+        {/* Section Header */}
+        <div className="max-w-4xl mb-16 md:mb-24">
+          <ScrollReveal>
+            <div className="mb-4 lg:mb-6">
+              <Meta className="meta-text meta-amber">What_We_Do</Meta>
+            </div>
+            <h2 className="section-h2 text-[#F5F2ED] uppercase">
+              Designing for <br />
+              <span className="text-prestige/30 font-serif italic lowercase tracking-tight font-normal">Growth &</span> <span className="text-[#F5F2ED]/20 font-serif italic lowercase tracking-tight font-normal">Connection.</span>
+            </h2>
+            <p className="body-text">
+              We combine world-class design with practical technology to help founders build products that people love. No tech jargon—just <span className="text-prestige/60 font-medium">results that matter</span>.
+            </p>
+          </ScrollReveal>
+        </div>
+
+        {/* Services Grid */}
+        <ScrollReveal className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 items-stretch">
+          {SERVICES.map((service, idx) => (
+            <ServiceCard 
+              key={service.id} 
+              service={service} 
+              index={idx} 
+              className={cn(idx === 2 && "md:col-span-2 lg:col-span-1")}
             />
+          ))}
+        </ScrollReveal>
 
-            <Container className="relative z-10">
-                {/* Section Header */}
-                <div className="max-w-3xl mb-24 md:mb-40">
-                    <ScrollReveal>
-                        <div className="flex items-center gap-4 mb-8">
-                            <div className="w-12 h-px bg-accent-base/40" />
-                            <Meta className="m-0 text-accent-base/60 uppercase tracking-[0.4em] font-bold text-[11px]">THE CORE PILLARS</Meta>
-                        </div>
-                        <h2 className="text-5xl md:text-7xl font-semibold text-white tracking-tighter leading-[0.95] mb-10">
-                            Engineering the <br />
-                            <span className="text-white/20 font-serif italic text-4xl md:text-6xl">Sentient Experience.</span>
-                        </h2>
-                        <p className="text-[18px] text-white/40 max-w-xl leading-relaxed font-light">
-                            We architect high-fidelity digital systems that transcend basic utility, creating emotive connections through technical mastery.
-                        </p>
-                    </ScrollReveal>
-                </div>
+        {/* Simplified Footer Action */}
+        <ScrollReveal delay={0.4} className="mt-16 md:mt-24 pt-12 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="flex items-center gap-6">
+            <div className="w-12 h-12 rounded-full bg-prestige/[0.03] border border-prestige/10 flex items-center justify-center">
+              <CheckCircle2 size={20} className="text-prestige/60" />
+            </div>
+            <div className="flex flex-col">
+               <span className="text-[10px] font-mono text-prestige tracking-[0.3em] font-bold uppercase">Our Commitment</span>
+               <span className="text-sm text-[#F5F2ED]/30 uppercase tracking-tight">Practical Solutions // Premium Delivery</span>
+            </div>
+          </div>
+          
+          <GlassPane 
+            plane={3} 
+            noBlur={true} 
+            padding="0"
+            radius={999}
+            className="group"
+          >
+            <a 
+              href="/services" 
+              className="flex items-center gap-8 px-12 py-5 transition-all duration-700"
+            >
+              <span className="text-[10px] font-bold tracking-[0.4em] uppercase text-[#F5F2ED]/60 group-hover:text-prestige">Explore_All_Services</span>
+              <ArrowUpRight size={18} className="text-prestige group-hover:rotate-45 transition-transform" />
+            </a>
+          </GlassPane>
+        </ScrollReveal>
+      </Container>
+    </section>
+  );
+}
 
-                {/* Asymmetric 3-Column Grid */}
-                <StaggerGroup className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 min-h-[640px]">
-                    {SERVICES.map((service, idx) => (
-                        <ServiceCard key={service.id} service={service} index={idx} />
-                    ))}
-                </StaggerGroup>
+/* ─────────────────────────── Sub-Components ─────────────────────────── */
 
-                {/* Footer Action */}
-                <ScrollReveal delay={0.4} className="mt-24 md:mt-40 border-t border-white/[0.04] pt-12 flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div className="flex items-center gap-4">
-                        <div className="w-8 h-8 rounded-full bg-white/[0.02] flex items-center justify-center">
-                            <Sparkles size={14} className="text-accent-base/40" />
-                        </div>
-                        <p className="text-[13px] text-white/40 max-w-[360px]">
-                            We don&apos;t just deliver assets. We architect the <span className="text-white/60">digital foundation</span> for your market dominance.
-                        </p>
-                    </div>
-                    
-                    <a 
-                        href="/services" 
-                        className="group flex items-center gap-4 text-[11px] font-bold tracking-[0.2em] uppercase text-white/40 hover:text-white transition-all duration-500"
-                    >
-                        <span>Full Capabilities Archive</span>
-                        <div className="w-8 h-8 rounded-full border border-white/5 flex items-center justify-center group-hover:border-white/20 transition-all">
-                            <ArrowUpRight size={14} />
-                        </div>
-                    </a>
-                </ScrollReveal>
-            </Container>
-        </section>
-    );
+function ServiceCard({ service, index, className }: { service: typeof SERVICES[0], index: number, className?: string }) {
+  const Icon = service.icon;
+  
+  return (
+    <FadeUp delay={0.1 + index * 0.1} className={cn("h-full", className)}>
+      <GlassPane
+        plane={2}
+        hover={true}
+        variant={service.isPrestige ? 'warm' : 'standard'}
+        radius={24}
+        className="h-full flex flex-col group overflow-hidden"
+      >
+        <div className="p-[24px_20px] md:p-[28px_24px] lg:p-[32px_28px] flex flex-col h-full relative z-10">
+          {/* Header */}
+          <div className="mb-16 flex items-center justify-between">
+            <div className={cn(
+              "w-14 h-14 rounded-2xl border flex items-center justify-center transition-all duration-700",
+              service.isPrestige ? "bg-prestige/5 border-prestige/20 group-hover:bg-prestige" : "bg-white/[0.02] border-white/[0.1] group-hover:bg-[#F5F2ED]/10"
+            )}>
+              <Icon size={24} className={cn(
+                "transition-colors duration-700",
+                service.isPrestige ? "text-prestige group-hover:text-black" : "text-[#F5F2ED]/40 group-hover:text-[#F5F2ED]"
+              )} />
+            </div>
+            <span className="text-[10px] font-mono text-prestige/30 tracking-[0.3em] font-bold uppercase">
+              SEV.0{index + 1}
+            </span>
+          </div>
+
+          {/* Title & Description */}
+          <div className="mb-12">
+            <span className="meta-text meta-amber mb-4 block">
+              {service.category}
+            </span>
+            <h3 className="card-h3 text-[#F5F2ED] mb-4 group-hover:text-prestige transition-colors duration-700">
+              {service.title}
+            </h3>
+            <p className="card-body group-hover:text-[#F5F2ED]/70 transition-colors duration-700">
+              {service.description}
+            </p>
+          </div>
+
+          {/* Deliverables: Minimalist Glass Pills - Plane 3 (RECEDED) */}
+          <div className="mt-auto pt-10">
+             <div className="flex flex-wrap gap-2">
+                {service.deliverables.map((item, i) => (
+                  <GlassPane
+                    key={i}
+                    plane={3}
+                    radius={999}
+                    padding="6px 16px"
+                    className="group-hover:border-prestige/20 group-hover:bg-prestige/5 transition-all duration-700"
+                  >
+                    <span className="text-[10px] font-mono text-[#F5F2ED]/30 tracking-wider uppercase group-hover:text-prestige/60">
+                      {item}
+                    </span>
+                  </GlassPane>
+                ))}
+             </div>
+          </div>
+          
+          {/* Arrow Indicator */}
+          <div className="absolute top-10 right-10 opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all duration-700">
+             <ArrowUpRight size={20} className="text-prestige" />
+          </div>
+        </div>
+      </GlassPane>
+    </FadeUp>
+  );
 }

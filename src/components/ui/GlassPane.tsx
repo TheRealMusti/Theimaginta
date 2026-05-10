@@ -1,77 +1,157 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { forwardRef, useEffect, useRef, useState, useCallback } from 'react';
 import { cn } from '@/lib/utils';
-import { useMousePosition } from '@/hooks/useMousePosition';
 
 export interface GlassPaneProps extends React.HTMLAttributes<HTMLDivElement> {
-    children: React.ReactNode;
-    className?: string;
-    hover?: boolean;
-    padding?: string;
-    radius?: number | string;
-    interactive?: boolean;
+  children: React.ReactNode;
+  className?: string;
+  variant?: 'standard' | 'warm';
+  plane?: 1 | 2 | 3;
+  noBlur?: boolean;
+  hover?: boolean;
+  padding?: string;
+  radius?: number | string;
 }
 
-export function GlassPane({
-    children,
-    className,
-    hover = false,
-    padding,
-    radius,
-    interactive = false,
-    ...props
-}: GlassPaneProps) {
-    const paneRef = React.useRef<HTMLDivElement>(null);
-    const [isHovered, setIsHovered] = React.useState(false);
-    const { mousePosition, isTouchDevice } = useMousePosition();
+export const GlassPane = forwardRef<HTMLDivElement, GlassPaneProps>(
+  function GlassPane(
+    {
+      children,
+      className,
+      variant = 'standard',
+      plane = 2,
+      noBlur = false,
+      hover = false,
+      padding,
+      radius,
+      ...props
+    },
+    forwardedRef
+  ) {
+    const [hasShimmered, setHasShimmered] = useState(false);
+    const [isShimmerActive, setIsShimmerActive] = useState(false);
+    const internalRef = useRef<HTMLDivElement>(null);
+
+    // Merge forwarded ref with internal ref
+    const setRefs = useCallback(
+      (node: HTMLDivElement | null) => {
+        (internalRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        if (typeof forwardedRef === 'function') {
+          forwardedRef(node);
+        } else if (forwardedRef) {
+          (forwardedRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }
+      },
+      [forwardedRef]
+    );
 
     useEffect(() => {
-        if (!interactive || !isHovered || !paneRef.current || !mousePosition || isTouchDevice) return;
-        const rect = paneRef.current.getBoundingClientRect();
-        const x = mousePosition.x - rect.left;
-        const y = mousePosition.y - rect.top;
-        paneRef.current.style.setProperty('--mouse-x', `${x}px`);
-        paneRef.current.style.setProperty('--mouse-y', `${y}px`);
-    }, [mousePosition, isHovered, interactive, isTouchDevice]);
+      if (typeof window === 'undefined' || window.innerWidth < 768) return;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !hasShimmered) {
+            setTimeout(() => {
+              setIsShimmerActive(true);
+              setHasShimmered(true);
+            }, 200);
+          }
+        },
+        { threshold: 0.3 }
+      );
+
+      if (internalRef.current) {
+        observer.observe(internalRef.current);
+      }
+
+      return () => observer.disconnect();
+    }, [hasShimmered]);
+
+    const borderOpacity = {
+      1: 0.05,
+      2: 0.04,
+      3: 0.03,
+    }[plane];
+
+    const restingBg = variant === 'standard'
+      ? 'rgba(245,242,237,0.014)'
+      : 'rgba(201,166,107,0.010)';
+
+    const restingBorder = variant === 'standard'
+      ? `rgba(245,242,237,${borderOpacity})`
+      : `rgba(201,166,107,0.040)`;
+
+    const hoverBg = variant === 'standard'
+      ? 'rgba(245,242,237,0.038)'
+      : 'rgba(201,166,107,0.03)';
 
     return (
+      <div
+        {...props}
+        ref={setRefs}
+        className={cn(
+          'relative overflow-hidden transition-all duration-500 ease-smooth group',
+          !noBlur && 'backdrop-blur-[8px]',
+          hover && 'hover:shadow-[0_4px_20px_rgba(201,166,107,0.03)]',
+          isShimmerActive && 'shimmer-active',
+          className
+        )}
+        style={{
+          background: restingBg,
+          border: `0.5px solid ${restingBorder}`,
+          padding: padding,
+          borderRadius: radius !== undefined ? radius : 16,
+          ...props.style,
+        }}
+      >
+        {/* GLASS SHIMMER PSEUDO (Patch 3) */}
         <div
-            ref={paneRef}
-            {...props}
-            onMouseEnter={(e) => {
-                if (interactive) setIsHovered(true);
-                props.onMouseEnter?.(e);
-            }}
-            onMouseLeave={(e) => {
-                if (interactive) setIsHovered(false);
-                props.onMouseLeave?.(e);
-            }}
-            className={cn(
-                'relative bg-white/[0.02] backdrop-blur-glass border-[0.5px] border-white/[0.06] overflow-hidden',
-                'transition-all duration-400 ease-smooth',
-                hover && 'hover:bg-white/[0.04] hover:border-white/[0.12]',
-                className
-            )}
+          className={cn(
+            "absolute inset-0 pointer-events-none z-10 transition-transform duration-[1000ms] ease-[cubic-bezier(0.16,1,0.3,1)] -translate-x-full",
+            isShimmerActive && "translate-x-full"
+          )}
+          style={{
+            background: 'linear-gradient(120deg, transparent 30%, rgba(245,242,237,0.03) 50%, transparent 70%)',
+            borderRadius: radius !== undefined ? radius : 16,
+          }}
+        />
+
+        {/* SHADOW ARCHITECTURE: BOTTOM-EDGE HIGHLIGHT (Plane 1 Only) */}
+        {plane === 1 && (
+          <div
+            className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-px pointer-events-none z-0"
             style={{
-                padding: padding,
-                borderRadius: radius !== undefined ? radius : 16,
+              background: 'linear-gradient(90deg, transparent, rgba(245,242,237,0.03), transparent)'
             }}
-        >
-            {interactive && !isTouchDevice && (
-                <div
-                    className="absolute inset-0 pointer-events-none rounded-[inherit] z-0"
-                    style={{
-                        opacity: isHovered ? 1 : 0,
-                        transition: 'opacity 0.6s ease',
-                        background: 'radial-gradient(300px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(201,166,107, 0.06) 0%, rgba(201,166,107, 0.01) 40%, transparent 80%)',
-                        mixBlendMode: 'luminosity'
-                    }}
-                />
-            )}
-            <div className="relative z-10 w-full h-full">
-                {children}
-            </div>
+          />
+        )}
+
+        {/* INNER CARD TOP HIGHLIGHT (Warm Glass Only) */}
+        {variant === 'warm' && (
+          <div
+            className="absolute top-0 left-0 w-full h-px pointer-events-none z-0 transition-opacity duration-300 opacity-50 group-hover:opacity-100"
+            style={{
+              background: 'linear-gradient(90deg, transparent 10%, rgba(201,166,107,0.05) 50%, transparent 90%)'
+            }}
+          />
+        )}
+
+        {/* HOVER OVERLAY - Material Recalibration */}
+        {hover && (
+          <div
+            className="absolute inset-0 pointer-events-none z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            style={{
+              background: hoverBg,
+              border: '0.5px solid rgba(201,166,107,0.10)'
+            }}
+          />
+        )}
+
+        <div className="relative z-10 w-full h-full">
+          {children}
         </div>
+      </div>
     );
-}
+  }
+);

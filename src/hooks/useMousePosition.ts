@@ -10,57 +10,57 @@ let isTouchDevice = false;
 let isLowEnd = false;
 
 function initGlobalMouseTracking() {
-    if (typeof window === 'undefined') return;
-    
-    isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    isLowEnd = navigator.hardwareConcurrency < 4;
-    
-    if (isTouchDevice) return;
+ if (typeof window === 'undefined') return;
+ 
+ isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+ isLowEnd = navigator.hardwareConcurrency < 4;
+ 
+ if (isTouchDevice) return;
 
 
-    let currentX = 0;
-    let currentY = 0;
-    let hasNewPosition = false;
+ let currentX = 0;
+ let currentY = 0;
+ let hasNewPosition = false;
 
-    const handleMouseMove = (e: MouseEvent) => {
-        currentX = e.clientX;
-        currentY = e.clientY;
-        hasNewPosition = true;
-    };
+ const handleMouseMove = (e: MouseEvent) => {
+ currentX = e.clientX;
+ currentY = e.clientY;
+ hasNewPosition = true;
+ };
 
-    const renderLoop = () => {
-        if (hasNewPosition) {
-            globalMousePosition = { x: currentX, y: currentY };
-            hasNewPosition = false;
-            listeners.forEach(listener => listener(globalMousePosition));
-        }
-        requestAnimationFrame(renderLoop);
-    };
+ const renderLoop = () => {
+ if (hasNewPosition) {
+ globalMousePosition = { x: currentX, y: currentY };
+ hasNewPosition = false;
+ listeners.forEach(listener => listener(globalMousePosition));
+ }
+ requestAnimationFrame(renderLoop);
+ };
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    requestAnimationFrame(renderLoop);
+ window.addEventListener('mousemove', handleMouseMove, { passive: true });
+ requestAnimationFrame(renderLoop);
 }
 
 export function useMousePosition() {
-    const [mousePosition, setMousePosition] = useState<Position>(globalMousePosition);
+ const [mousePosition, setMousePosition] = useState<Position>(globalMousePosition);
 
-    useEffect(() => {
-        if (typeof window === 'undefined') return;
-        
-        if (!isInitialized) {
-            initGlobalMouseTracking();
-            isInitialized = true;
-        }
+ useEffect(() => {
+ if (typeof window === 'undefined') return;
+ 
+ if (!isInitialized) {
+ initGlobalMouseTracking();
+ isInitialized = true;
+ }
 
-        if (isTouchDevice) return;
+ if (isTouchDevice) return;
 
-        const listener: Listener = (pos) => setMousePosition(pos);
-        listeners.add(listener);
+ const listener: Listener = (pos) => setMousePosition(pos);
+ listeners.add(listener);
 
-        return () => {
-            listeners.delete(listener);
-        };
-    }, []);
+ return () => {
+ listeners.delete(listener);
+ };
+ }, []);
 
-    return { mousePosition, isTouchDevice, isLowEnd };
+ return { mousePosition, isTouchDevice, isLowEnd };
 }

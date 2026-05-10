@@ -1,279 +1,315 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { 
-    motion, 
-    useScroll, 
-    useTransform, 
-    useSpring,
-    useReducedMotion
-} from 'framer-motion';
-import { Meta, SectionAtmosphere, HydrationSafe } from '@/components/ui';
-import { ScrollReveal } from '@/components/motion';
 import Image from 'next/image';
-import { EASING } from '@/lib/constants';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Container, Meta, GrainOverlay, Button, GlassPane } from '@/components/ui';
+import { cn } from '@/lib/utils';
+import { ArrowUpRight, Search, Database, Globe, Shield } from 'lucide-react';
+import { ScrollReveal } from '@/components/motion';
 
-interface Project {
-    id: string;
-    title: string;
-    category: string;
-    year: string;
-    index: string;
-    image: string;
-    description: string;
-    color: string;
-}
+/* ─────────────────────────── Projects Data ─────────────────────────── */
 
-const PROJECTS: Project[] = [
-    {
-        id: "lifestyle-gym",
-        title: "Lifestyle Gym",
-        category: "Brand Identity + Web",
-        year: "2026",
-        index: "01",
-        image: "/selectedwork/gym.jpg",
-        description: "A premium fitness platform where luxury meets discipline, designed for high-performance lifestyles.",
-        color: "rgba(201, 166, 107, 0.15)"
-    },
-    {
-        id: "aura-automotive",
-        title: "Aura Automotive",
-        category: "Product Design + Dev",
-        year: "2025",
-        index: "02",
-        image: "/selectedwork/car.jpg",
-        description: "Next-generation interface for electric mobility systems.",
-        color: "rgba(255, 255, 255, 0.1)"
-    },
-    {
-        id: "ellecanta-beauty",
-        title: "Ellecanta",
-        category: "Brand + Packaging",
-        year: "2025",
-        index: "03",
-        image: "/selectedwork/skincare.jpg",
-        description: "High-end skincare branding with a focus on sustainable luxury.",
-        color: "rgba(201, 166, 107, 0.12)"
-    },
-    {
-        id: "artisan-pizza",
-        title: "Artisan Pizza",
-        category: "Digital Commerce",
-        year: "2025",
-        index: "04",
-        image: "/selectedwork/pizza.jpg",
-        description: "A luxury dining experience where traditional craft meets modern digital commerce.",
-        color: "rgba(255, 255, 255, 0.08)"
-    },
+const PROJECTS = [
+  {
+    id: "lifestyle-gym",
+    index: "01",
+    title: "Lifestyle Gym",
+    category: "Brand Identity // Web",
+    image: "/selectedwork/gym.png",
+    accentColor: "rgba(196, 163, 110, 0.15)", // Prestige Gold
+    description: "A premium fitness platform where luxury meets discipline, designed for high-performance lifestyles.",
+    metric: "124%_GROWTH",
+    capabilities: ["DESIGN", "SECURED", "SCALE"]
+  },
+  {
+    id: "aura-automotive",
+    index: "02",
+    title: "Aura Automotive",
+    category: "Product Design // Dev",
+    image: "/selectedwork/car.png",
+    accentColor: "rgba(74, 144, 226, 0.12)", // Electric Blue
+    description: "Next-generation interface for electric mobility systems, bridging the gap between hardware and soul.",
+    metric: "ZERO_FRICTION",
+    capabilities: ["ENGINEERING", "SECURED", "VISION"]
+  },
+  {
+    id: "ellecanta",
+    index: "03",
+    title: "Ellecanta",
+    category: "Brand // Packaging",
+    image: "/selectedwork/skincare.png",
+    accentColor: "rgba(230, 213, 193, 0.15)", // Champagne
+    description: "High-end skincare branding with a focus on sustainable luxury and refractive aesthetics.",
+    metric: "GLOBAL_PRESENCE",
+    capabilities: ["BRANDING", "SECURED", "SUSTAIN"]
+  },
+  {
+    id: "artisan-pizza",
+    index: "04",
+    title: "Artisan Pizza",
+    category: "Digital Commerce",
+    image: "/selectedwork/pizza.png",
+    accentColor: "rgba(211, 84, 0, 0.12)", // Artisan Burnt Orange
+    description: "A luxury dining experience where traditional craft meets modern digital commerce infrastructure.",
+    metric: "PURE_CRAFT",
+    capabilities: ["COMMERCE", "SECURED", "CRAFT"]
+  }
 ];
 
-// Double projects for the infinite feel (but we'll start at exactly index 0)
-const INFINITE_PROJECTS = [...PROJECTS, ...PROJECTS];
+const LOOP_DURATION = 7000;
 
 /* ─────────────────────────── Main Component ─────────────────────────── */
 
 export function Work() {
-    const targetRef = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: targetRef,
-        offset: ["start start", "end end"] // Precise mapping
-    });
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
-    // We shift the starting position to ensure the first project is DEAD CENTER on entry
-    // Each project is 90vw + gap. We start at 0%.
-    const x = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
-    const springX = useSpring(x, { stiffness: 80, damping: 25, restDelta: 0.001 });
+  useEffect(() => {
+    if (isHovered) return;
 
-    const reduced = useReducedMotion();
+    const startTime = Date.now();
+    const timer = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const currentProgress = (elapsed % LOOP_DURATION) / LOOP_DURATION * 100;
+      setProgress(currentProgress);
 
-    return (
-        <section 
-            ref={targetRef}
-            id="work" 
-            aria-label="Selected Work" 
-            className="relative h-[500vh] bg-[#030303]"
+      if (elapsed >= LOOP_DURATION) {
+        setActiveIndex((prev) => (prev + 1) % PROJECTS.length);
+      }
+    }, 16);
+
+    return () => clearInterval(timer);
+  }, [activeIndex, isHovered]);
+
+  const handleManualSelect = (index: number) => {
+    setActiveIndex(index);
+    setProgress(0);
+  };
+
+  const activeProject = PROJECTS[activeIndex];
+
+  return (
+    <section 
+      id="work" 
+      className="relative w-full h-[80vh] min-h-[600px] max-h-[900px] bg-transparent overflow-hidden flex items-center"
+    >
+      {/* ════ CINEMATIC BACKGROUND STAGE ════ */}
+      <AnimatePresence mode="wait">
+        <motion.div 
+          key={activeIndex}
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 0.55, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.98 }}
+          transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute inset-0 z-0"
         >
-            {/* ════ BACKGROUND ATMOSPHERE ════ */}
-            <div className="sticky top-0 h-screen flex flex-col items-center overflow-hidden">
-                <div className="absolute inset-0 pointer-events-none">
-                    <SectionAtmosphere 
-                        number="Work" 
-                        glowColor="rgba(201, 166, 107, 0.02)"
-                        glowPosition={{ top: '20%', left: '30%' }}
-                        glowSize={1400}
-                        isHovered={false} 
-                    />
-                    {/* Architectural Grid Bridge */}
-                    <div className="absolute inset-0 opacity-[0.02]" 
-                        style={{ 
-                            backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)`,
-                            backgroundSize: '80px 80px'
-                        }}
-                    />
-                </div>
+          <Image 
+            src={activeProject.image} 
+            alt={activeProject.title}
+            fill
+            priority
+            className="object-cover brightness-[0.45] contrast-[1.1]"
+          />
+          
+          {/* Color Tint Overlay - Subtle architectural wash */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="absolute inset-0 pointer-events-none"
+            style={{ backgroundColor: activeProject.accentColor }}
+          />
 
-                {/* ════ HEADER (Floating) ════ */}
-                <div className="absolute top-12 left-12 md:top-16 md:left-16 z-30 pointer-events-none">
-                    <ScrollReveal>
-                        <div className="flex flex-col">
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="w-10 h-px bg-accent-base/40" />
-                                <Meta className="m-0 text-accent-base uppercase tracking-[0.4em] font-bold text-[10px]">SELECTED_BENCHMARKS</Meta>
-                            </div>
-                            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-white/40">
-                                Traverse the <span className="text-white">Archive.</span>
-                            </h2>
-                        </div>
-                    </ScrollReveal>
-                </div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60" />
+        </motion.div>
+      </AnimatePresence>
 
-                {/* ════ SHOWCASE ENGINE (Full Bleed) ════ */}
-                <HydrationSafe fallback={<div className="flex h-full items-center px-[5vw] gap-[5vw] opacity-0" />}>
-                    <motion.div 
-                        style={{ x: reduced ? "0%" : springX }}
-                        className="flex h-full items-center pl-[5vw] pr-[5vw] gap-[5vw]"
-                    >
-                        {INFINITE_PROJECTS.map((project, idx) => (
-                            <WorkItem key={`${project.id}-${idx}`} project={project} index={idx} />
-                        ))}
-                    </motion.div>
-                </HydrationSafe>
-
-                {/* ════ NAVIGATION OVERLAY ════ */}
-                <div className="absolute bottom-16 left-16 right-16 flex items-end justify-between pointer-events-none z-30">
-                    <div className="flex flex-col gap-4">
-                        <div className="flex items-center gap-4">
-                            <span className="text-[10px] font-mono text-white/20 uppercase tracking-widest">Traverse Progress</span>
-                            <div className="w-48 h-px bg-white/[0.05] relative overflow-hidden">
-                                <motion.div 
-                                    style={{ scaleX: scrollYProgress }}
-                                    className="absolute inset-0 bg-accent-base origin-left"
-                                />
-                            </div>
-                        </div>
-                        <span className="text-[9px] font-mono text-white/10 uppercase tracking-[0.4em]">IMAGINTA_CORE_PROTOCOL_v4.2</span>
-                    </div>
-                    
-                    <div className="hidden lg:flex flex-col items-end gap-2">
-                        <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">Live Monitoring</span>
-                        <div className="flex items-center gap-3 bg-white/[0.03] px-4 py-2 rounded-full border border-white/[0.05]">
-                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                            <span className="text-[11px] font-mono text-white/60">SYSTEM_NOMINAL</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
-}
-
-/* ─────────────────────────── WorkItem Component ─────────────────────────── */
-
-function WorkItem({ project }: { project: Project; index: number }) {
-    const itemRef = useRef<HTMLDivElement>(null);
-    const [isHovered, setIsHovered] = useState(false);
-
-    return (
-        <div 
-            ref={itemRef}
-            className="flex-shrink-0 w-[90vw] md:w-[85vw] lg:w-[80vw] h-[70vh] md:h-[75vh] group/item"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-        >
-            <Link href={`/work/${project.id}`} className="block relative h-full">
-                {/* ════ PROJECT CONTAINER ════ */}
-                <div className="relative w-full h-full rounded-[40px] md:rounded-[60px] overflow-hidden bg-white/[0.01] border border-white/[0.06] group-hover/item:border-accent-base/40 transition-all duration-1000">
-                    
-                    {/* Parallax Image Layer */}
-                    <motion.div 
-                        className="absolute inset-0"
-                        animate={isHovered ? { scale: 1.05 } : { scale: 1 }}
-                        transition={{ duration: 1.5, ease: EASING.smoothArray }}
-                    >
-                        <Image 
-                            src={project.image} 
-                            alt={project.title}
-                            fill
-                            className="object-cover opacity-50 group-hover/item:opacity-80 transition-all duration-1000 grayscale-[0.5] group-hover/item:grayscale-0"
-                        />
-                    </motion.div>
-                    
-                    {/* Atmospheric Overlays */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303]/40 opacity-90 group-hover/item:opacity-60 transition-opacity duration-1000" />
-                    
-                    <div 
-                        className="absolute inset-0 opacity-0 group-hover/item:opacity-30 transition-opacity duration-1000 mix-blend-screen"
-                        style={{ 
-                            background: `radial-gradient(circle at center, ${project.color}, transparent 70%)`
-                        }}
-                    />
-
-                    {/* Metadata: Top Left (Blueprint IDX) */}
-                    <div className="absolute top-12 left-12 z-20">
-                        <div className="flex flex-col gap-1">
-                            <span className="text-[11px] font-bold tracking-[0.4em] text-accent-base uppercase font-mono">ARCHIVE_IDX_{project.index}</span>
-                            <div className="w-full h-px bg-accent-base/30 mt-1" />
-                        </div>
-                    </div>
-
-                    {/* Metadata: Top Right (Technical Specs) */}
-                    <div className="absolute top-12 right-12 z-20 hidden md:flex items-center gap-10 opacity-40 group-hover/item:opacity-100 transition-opacity duration-700">
-                        <div className="flex flex-col items-end">
-                            <span className="text-[9px] font-mono text-white/50 uppercase tracking-widest">Released</span>
-                            <span className="text-[12px] font-bold text-white uppercase">{project.year}</span>
-                        </div>
-                        <div className="w-px h-6 bg-white/10" />
-                        <div className="flex flex-col items-end">
-                            <span className="text-[9px] font-mono text-white/50 uppercase tracking-widest">Authority</span>
-                            <span className="text-[12px] font-bold text-white uppercase">TOP_TIER</span>
-                        </div>
-                    </div>
-
-                    {/* Content Layer (Bottom) */}
-                    <div className="absolute bottom-12 left-12 right-12 md:bottom-20 md:left-20 md:right-20 z-20">
-                        <div className="max-w-3xl">
-                            <div className="flex items-center gap-4 mb-6">
-                                <span className="text-[10px] font-bold tracking-[0.4em] text-accent-base/80 uppercase">{project.category}</span>
-                                <div className="h-px w-12 bg-accent-base/20" />
-                            </div>
-                            
-                            <h3 className="text-5xl md:text-8xl font-bold text-white tracking-tighter mb-8 group-hover/item:text-accent-base transition-colors duration-1000 leading-[0.9]">
-                                {project.title}
-                            </h3>
-                            
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={isHovered ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                                className="hidden lg:block"
-                            >
-                                <p className="text-xl text-white/40 leading-relaxed font-light mb-10 max-w-2xl">
-                                    {project.description}
-                                </p>
-                                
-                                <div className="flex items-center gap-8">
-                                    <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-full backdrop-blur-md">
-                                        <span className="text-[11px] font-bold tracking-widest text-white/60 uppercase">Explore Case Study</span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                                        <span className="text-[10px] font-mono text-white/20 uppercase tracking-widest">System Ready</span>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        </div>
-                    </div>
-
-                    {/* Corner Framing Decor */}
-                    <div className="absolute inset-10 pointer-events-none opacity-10 group-hover/item:opacity-30 transition-opacity duration-1000">
-                        <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-white" />
-                        <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-white" />
-                        <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-white" />
-                        <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-white" />
-                    </div>
-                </div>
-            </Link>
+      <GrainOverlay opacity={0.012} />
+      
+      {/* Structural Vault Accents */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-10 left-10 flex items-center gap-4 opacity-20">
+          <Database size={14} className="text-white" />
+          <div className="h-px w-24 bg-white" />
+          <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-white">Project_0{activeProject.index}</span>
         </div>
-    );
+        <div className="absolute bottom-10 right-10 flex items-center gap-4 opacity-20">
+          <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-white">Design_Excellence</span>
+          <div className="h-px w-24 bg-white" />
+          <Shield size={14} className="text-white" />
+        </div>
+      </div>
+
+      <Container className="relative z-10 flex flex-col items-center justify-center h-full">
+        <ScrollReveal className="w-full max-w-5xl">
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={activeIndex}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -30 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full"
+            >
+              <GlassPane
+                plane={1}
+                hover={true}
+                radius={40}
+                className="bg-[#0A090C]/20 border-white/[0.03] p-8 md:p-14 lg:p-16 relative overflow-hidden group/card"
+              >
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-stretch relative z-10">
+                  
+                  {/* Left Column: Editorial Identity */}
+                  <div className="lg:col-span-7 flex flex-col justify-center space-y-12">
+                    <div className="space-y-6">
+                      <motion.div 
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="flex items-center gap-6"
+                      >
+                        <div className="flex items-center gap-2">
+                           <div className="w-1.5 h-1.5 rounded-full bg-prestige shadow-[0_0_8px_rgba(196,163,110,0.4)]" />
+                           <span className="text-[10px] font-mono font-semibold tracking-[0.5em] uppercase text-prestige">{activeProject.category}</span>
+                        </div>
+                        <div className="h-px flex-1 max-w-[80px] bg-white/10" />
+                      </motion.div>
+                      
+                      <h3 className="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tighter text-white uppercase leading-[0.85]">
+                        {activeProject.title.split(' ')[0]} <br />
+                        <span className="text-white/15 font-serif italic lowercase font-normal tracking-[-0.04em]">{activeProject.title.split(' ')[1]}</span>
+                      </h3>
+                    </div>
+
+                    <p className="text-[17px] md:text-[19px] text-white/40 leading-relaxed font-light max-w-lg">
+                      {activeProject.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-3">
+                      {activeProject.capabilities.map((cap, i) => (
+                        <GlassPane 
+                          key={i} 
+                          plane={3} 
+                          radius={999}
+                          padding="8px 20px"
+                          className="group/cap hover:border-prestige/30 transition-colors duration-500"
+                        >
+                          <span className="text-[9px] font-mono tracking-[0.2em] uppercase text-white/30 group-hover/cap:text-prestige transition-colors">{cap}</span>
+                        </GlassPane>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Tactical HUD & Action */}
+                  <div className="lg:col-span-5 flex flex-col justify-between gap-12 py-4">
+                    <div className="space-y-10">
+                      {/* Technical Metric Module - Plane 2 (MIDDLE) */}
+                      <GlassPane 
+                        plane={2}
+                        radius={32}
+                        padding="32px"
+                        className="group/metric"
+                      >
+                        <div className="relative z-10 space-y-6">
+                           <div className="flex items-center justify-between">
+                              <span className="text-[9px] font-mono text-white/20 uppercase tracking-[0.4em]">Performance_Metric</span>
+                              <div className="w-6 h-px bg-white/10" />
+                           </div>
+                           
+                           <div className="flex flex-col">
+                              <div className="text-4xl md:text-5xl font-semibold text-white tracking-tighter tabular-nums mb-1">
+                                 {activeProject.metric.split('_')[0]}
+                              </div>
+                              <div className="text-[10px] font-mono text-prestige tracking-[0.3em] uppercase font-semibold">
+                                 {activeProject.metric.split('_')[1]}
+                              </div>
+                           </div>
+                        </div>
+                      </GlassPane>
+
+                      <div className="flex items-center gap-6 px-4">
+                         <Globe size={14} className="text-white/10" />
+                         <div className="h-px flex-1 bg-white/[0.05]" />
+                         <span className="text-[9px] font-mono text-white/10 tracking-widest uppercase">Global_Protocol</span>
+                      </div>
+                    </div>
+
+                    <GlassPane 
+                      plane={1} 
+                      padding="0" 
+                      radius={32}
+                      className="group/btn"
+                    >
+                      <Link 
+                        href={`/work/${activeProject.id}`}
+                        className="relative flex items-center justify-between w-full p-8 transition-all duration-700 overflow-hidden"
+                      >
+                        <div className="absolute inset-0 bg-prestige opacity-0 group-hover/btn:opacity-[0.03] transition-opacity duration-700" />
+                        
+                        <div className="relative z-10 space-y-1">
+                          <span className="text-[10px] font-semibold tracking-[0.3em] uppercase text-prestige/60 group-hover/btn:text-prestige transition-colors">Project_Details</span>
+                          <div className="text-xl font-semibold text-white/80 group-hover/btn:text-white group-hover/btn:translate-x-2 transition-all">Explore Case Study</div>
+                        </div>
+
+                        <div className="relative z-10 w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 group-hover/btn:bg-prestige group-hover/btn:text-black group-hover/btn:rotate-45 transition-all duration-700">
+                          <ArrowUpRight size={28} />
+                        </div>
+                      </Link>
+                    </GlassPane>
+                  </div>
+
+                </div>
+              </GlassPane>
+            </motion.div>
+          </AnimatePresence>
+        </ScrollReveal>
+
+        {/* ════ BOTTOM HUD NAVIGATION ════ */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-2xl px-8 flex items-center gap-8">
+          {PROJECTS.map((project, idx) => (
+            <button
+              key={project.id}
+              onClick={() => handleManualSelect(idx)}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              className="group relative flex-1 py-4"
+            >
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-end">
+                  <span className={cn(
+                    "text-[11px] font-mono transition-colors duration-500",
+                    activeIndex === idx ? "text-prestige" : "text-white/20 group-hover:text-white/40"
+                  )}>
+                    0{project.index}
+                  </span>
+                  {activeIndex === idx && (
+                    <motion.span 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="text-[9px] font-bold tracking-widest text-prestige uppercase"
+                    >
+                      Active
+                    </motion.span>
+                  )}
+                </div>
+                <div className="h-0.5 w-full bg-white/5 relative overflow-hidden">
+                  {activeIndex === idx && (
+                    <motion.div 
+                      className="absolute inset-0 bg-prestige"
+                      style={{ width: `${progress}%` }}
+                    />
+                  )}
+                  {activeIndex !== idx && (
+                    <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500" />
+                  )}
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
 }

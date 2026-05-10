@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        black: COLORS.black,
+        void: COLORS.void,
         white: COLORS.white,
         nearWhite: COLORS.nearWhite,
         elevated: COLORS.elevated,
@@ -19,6 +19,7 @@ const config: Config = {
         accent2: COLORS.accent2,
         text: COLORS.text,
         glass: COLORS.glass,
+        'prestige': COLORS.prestige.base,
       },
       fontFamily: {
         sans: ['var(--font-instrument)'],
@@ -52,6 +53,9 @@ const config: Config = {
       },
       animation: {
         'status-pulse': 'status-pulse 2.4s ease-in-out infinite',
+      },
+      backgroundImage: {
+        'success-glow': `radial-gradient(circle at center, ${COLORS.prestige.glow}, transparent 70%)`,
       }
     },
   },

@@ -2,224 +2,183 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
-import { Container, Meta, StatusDot } from '@/components/ui';
-import { COLORS, EASING } from '@/lib/constants';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Container, StatusDot } from '@/components/ui';
 
 const NAV_LINKS = [
-    { label: 'Work', href: '/work' },
-    { label: 'Intelligence', href: '/intelligence' },
-    { label: 'Services', href: '/services' },
-    { label: 'Company', href: '/about' },
+  { label: 'Work', href: '/work' },
+  { label: 'Intelligence', href: '/intelligence' },
+  { label: 'Services', href: '/services' },
+  { label: 'Company', href: '/about' },
 ];
 
 const SOCIAL_LINKS = [
-    { label: 'LinkedIn', href: 'https://linkedin.com/company/imagintax1' },
-    { label: 'Instagram', href: 'https://instagram.com/imagintax1' },
-    { label: 'X', href: 'https://x.com/imagintax1' },
-    { label: 'GitHub', href: 'https://github.com/imagintax1' },
+  { label: 'LinkedIn', href: 'https://linkedin.com/company/imagintax1' },
+  { label: 'Instagram', href: 'https://instagram.com/instagram.com/imagintax1' },
+  { label: 'X', href: 'https://x.com/imagintax1' },
+  { label: 'GitHub', href: 'https://github.com/imagintax1' },
 ];
 
 function useBrusselsTime() {
-    const [time, setTime] = useState('--:--');
+  const [time, setTime] = useState('--:--');
 
-    useEffect(() => {
-        const tick = () => {
-            const now = new Date();
-            const fmt = new Intl.DateTimeFormat('en-GB', {
-                timeZone: 'Europe/Brussels',
-                hour: '2-digit',
-                minute: '2-digit',
-                hourCycle: 'h23',
-            });
-            setTime(fmt.format(now));
-        };
-        tick();
-        const id = setInterval(tick, 60000);
-        return () => clearInterval(id);
-    }, []);
+  useEffect(() => {
+    const tick = () => {
+      const now = new Date();
+      const fmt = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Europe/Brussels',
+        hour: '2-digit',
+        minute: '2-digit',
+        hourCycle: 'h23',
+      });
+      setTime(fmt.format(now));
+    };
+    tick();
+    const id = setInterval(tick, 60000);
+    return () => clearInterval(id);
+  }, []);
 
-    return time;
+  return time;
 }
 
-function MagneticLink({ children, href, external = false }: { children: React.ReactNode; href: string; external?: boolean }) {
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
-    const prefersReducedMotion = useReducedMotion();
+function FooterLink({ label, href, external = false }: { label: string; href: string; external?: boolean }) {
+  const [isHovered, setIsHovered] = useState(false);
 
-    const springConfig = { damping: 40, stiffness: 400 };
-    const springX = useSpring(x, springConfig);
-    const springY = useSpring(y, springConfig);
+  const LinkTag = external ? 'a' : Link;
+  const externalProps = external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
 
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (prefersReducedMotion) return;
-        const rect = e.currentTarget.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        x.set((e.clientX - centerX) * 0.4);
-        y.set((e.clientY - centerY) * 0.4);
-    };
+  return (
+    <LinkTag
+      href={href}
+      {...externalProps}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="group relative flex items-center gap-3 py-1"
+    >
+      <motion.span
+        animate={{ opacity: isHovered ? 1 : 0.5 }}
+        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+        className="text-[13px] font-medium tracking-tight text-white"
+      >
+        {label}
+      </motion.span>
 
-    const handleMouseLeave = () => {
-        x.set(0);
-        y.set(0);
-    };
-
-    const LinkTag = external ? 'a' : Link;
-    const externalProps = external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
-
-    return (
-        <motion.div
-            style={{ x: springX, y: springY }}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            className="relative"
-        >
-            <LinkTag
-                href={href}
-                {...externalProps}
-                className="group relative flex items-center gap-2 text-white/40 hover:text-white transition-all duration-500 py-1"
-            >
-                <span className="text-[14px] font-medium tracking-tight">
-                    {children}
-                </span>
-                <div className="h-[1px] w-0 bg-accent-base/40 group-hover:w-4 transition-all duration-500" />
-            </LinkTag>
-        </motion.div>
-    );
+      {/* Cyberpunk Spark */}
+      <AnimatePresence>
+        {isHovered && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0 }}
+            className="w-[4px] h-[4px] rounded-full bg-prestige shadow-[0_0_8px_rgba(196,163,110,0.8)]"
+          />
+        )}
+      </AnimatePresence>
+    </LinkTag>
+  );
 }
 
 export function Footer() {
-    const brusselsTime = useBrusselsTime();
+  const brusselsTime = useBrusselsTime();
 
-    return (
-        <footer className="relative bg-[#030303] overflow-hidden">
-            {/* Top Signal Line - The "Horizon" */}
-            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white/[0.08] to-transparent relative">
-                <motion.div 
-                    className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-transparent via-accent-base/30 to-transparent"
-                    animate={{ left: ['-10%', '110%'] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                />
+  return (
+    <footer className="relative overflow-hidden pt-32 pb-16 bg-transparent">
+      {/* ── FOOTER ATMOSPHERIC CLOSURE (Patch 3) ── */}
+      <div 
+        aria-hidden="true"
+        className="absolute top-0 left-0 w-full h-[1px] z-20"
+        style={{
+          background: 'linear-gradient(90deg, transparent 10%, rgba(201,166,107,0.07) 50%, transparent 90%)'
+        }}
+      />
+      
+      <div 
+        aria-hidden="true"
+        className="absolute top-0 inset-x-0 h-[300px] pointer-events-none z-0"
+        style={{
+          background: 'radial-gradient(ellipse 60% 40% at 50% 20%, rgba(201,166,107,0.02), transparent 70%)'
+        }}
+      />
+
+      <Container className="relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 md:gap-x-12 gap-y-16">
+          {/* Column 1-4: Identity & Signature */}
+          <div className="md:col-span-4 flex flex-col justify-between gap-12">
+            <div className="flex flex-col gap-6">
+              <Link href="/" className="inline-block">
+                <span className="text-[20px] font-bold tracking-[-0.04em] text-white uppercase flex items-center gap-1">
+                  IMAGINTA<span className="w-1.5 h-1.5 rounded-full bg-prestige shadow-[0_0_8px_rgba(196,163,110,0.4)]" />
+                </span>
+              </Link>
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] uppercase tracking-[0.3em] text-white/20 font-medium">Headquarters</span>
+                <span className="text-[12px] text-white/50 font-medium tracking-tight">Brussels, Belgium</span>
+                <span className="text-[11px] font-mono text-white/30 tracking-wider uppercase mt-1">{brusselsTime} CET</span>
+              </div>
             </div>
 
-            {/* Background Atmosphere */}
-            <div className="absolute inset-0 pointer-events-none z-0">
-                <div 
-                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[600px] opacity-[0.03]"
-                    style={{
-                        background: `radial-gradient(circle at center bottom, ${COLORS.accent.base} 0%, transparent 70%)`,
-                    }}
-                />
-                {/* Subtle Grid */}
-                <div 
-                    className="absolute inset-0 opacity-[0.02]"
-                    style={{
-                        backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-                        backgroundSize: '100px 100px',
-                    }}
-                />
+            <div className="hidden md:flex flex-col gap-4">
+              <p className="text-[13px] text-white/40 leading-relaxed max-w-[280px]">
+                Architecting digital intelligence with cinematic precision.
+              </p>
+              <div className="flex items-center gap-2">
+                <StatusDot status="connection" className="w-[6px] h-[6px]" />
+                <span className="text-[9px] uppercase tracking-[0.2em] text-white/20 font-bold">Live Connection</span>
+              </div>
             </div>
+          </div>
 
-            <Container className="relative z-10 pt-40 pb-20">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-y-24 md:gap-x-12">
-                    {/* Left: Core Identity & Telemetry */}
-                    <div className="md:col-span-5 flex flex-col gap-12">
-                        <div className="flex flex-col gap-6">
-                            <Link href="/" className="inline-block">
-                                <span className="text-[24px] font-bold tracking-tighter text-white uppercase">
-                                    imaginta<span className="text-accent-base">.</span>
-                                </span>
-                            </Link>
-                            <p className="text-white/40 text-[16px] leading-relaxed max-w-[320px] font-medium tracking-tight">
-                                Synthesizing design and intelligence into premium digital architecture.
-                            </p>
-                        </div>
+          {/* Column 5-7: Directory */}
+          <div className="md:col-span-3 flex flex-col gap-8">
+            <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/20 font-bold">Directory</h4>
+            <nav className="flex flex-col gap-2">
+              {NAV_LINKS.map((link) => (
+                <FooterLink key={link.label} label={link.label} href={link.href} />
+              ))}
+            </nav>
+          </div>
 
-                        {/* Telemetry Module */}
-                        <div className="flex flex-col gap-6 border-l border-white/5 pl-6">
-                            <div className="flex flex-col gap-1">
-                                <span className="text-[10px] font-mono text-white/20 tracking-[0.2em] uppercase">Location</span>
-                                <span className="text-[13px] font-medium text-white/60 uppercase tracking-wider">Brussels, BE // 50.8503° N</span>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <span className="text-[10px] font-mono text-white/20 tracking-[0.2em] uppercase">Studio Time</span>
-                                <span className="text-[13px] font-medium text-white/60 uppercase tracking-wider">{brusselsTime} CET</span>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <StatusDot status="online" pulse={true} />
-                                <span className="text-[10px] font-mono text-accent-base/60 tracking-[0.3em] uppercase animate-pulse">
-                                    SYNCHRONIZED
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+          {/* Column 8-10: Ecosystem */}
+          <div className="md:col-span-3 flex flex-col gap-8">
+            <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/20 font-bold">Ecosystem</h4>
+            <nav className="flex flex-col gap-2">
+              {SOCIAL_LINKS.map((link) => (
+                <FooterLink key={link.label} label={link.label} href={link.href} external />
+              ))}
+            </nav>
+          </div>
 
-                    {/* Right: Navigation Columns */}
-                    <div className="md:col-span-3 flex flex-col gap-10">
-                        <Meta className="text-white/20 text-[10px]">Directory</Meta>
-                        <nav className="flex flex-col gap-3">
-                            {NAV_LINKS.map((link) => (
-                                <MagneticLink key={link.label} href={link.href}>
-                                    {link.label}
-                                </MagneticLink>
-                            ))}
-                        </nav>
-                    </div>
+          {/* Column 11-12: Action / Glass Pill */}
+          <div className="md:col-span-2 flex flex-col gap-8 items-start md:items-end">
+            <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/20 font-bold md:text-right">Contact</h4>
+            <Link 
+              href="/contact" 
+              className="px-6 py-3 rounded-full bg-white/[0.01] border border-white/[0.04] backdrop-blur-xl text-white/60 text-[12px] font-medium tracking-tight hover:text-white hover:border-prestige/20 transition-all duration-500"
+            >
+              Start Project
+            </Link>
+          </div>
+        </div>
 
-                    <div className="md:col-span-3 flex flex-col gap-10">
-                        <Meta className="text-white/20 text-[10px]">Ecosystem</Meta>
-                        <nav className="flex flex-col gap-3">
-                            {SOCIAL_LINKS.map((social) => (
-                                <MagneticLink key={social.label} href={social.href} external>
-                                    {social.label}
-                                </MagneticLink>
-                            ))}
-                        </nav>
-                    </div>
-                </div>
+        {/* Legal & Finality */}
+        <div className="mt-32 pt-8 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex items-center gap-8">
+            <span className="text-[10px] text-white/20 uppercase tracking-[0.2em]">
+              © {new Date().getFullYear()} IMAGINTA
+            </span>
+            <div className="flex gap-6">
+              <Link href="/privacy" className="text-[10px] text-white/20 hover:text-white/60 transition-colors uppercase tracking-[0.2em]">Privacy</Link>
+              <Link href="/terms" className="text-[10px] text-white/20 hover:text-white/60 transition-colors uppercase tracking-[0.2em]">Terms</Link>
+            </div>
+          </div>
 
-                {/* Cinematic Signature */}
-                <div className="mt-40 relative flex justify-center items-center h-48 overflow-hidden">
-                    <motion.div
-                        initial={{ y: '100%', opacity: 0 }}
-                        whileInView={{ y: 0, opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1.5, ease: EASING.smoothArray }}
-                        className="relative"
-                    >
-                        <span 
-                            className="text-[20vw] font-black leading-none tracking-tighter text-transparent bg-clip-text select-none"
-                            style={{
-                                backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.05) 0%, rgba(201,166,107,0.02) 100%)`,
-                                WebkitTextStroke: '1px rgba(255,255,255,0.02)'
-                            }}
-                        >
-                            IMAGINTA
-                        </span>
-                    </motion.div>
-                </div>
-
-                {/* Bottom Bar */}
-                <div className="flex flex-col md:flex-row justify-between items-center gap-8 border-t border-white/[0.03] pt-12">
-                    <div className="flex items-center gap-8">
-                        <span className="text-[10px] font-mono text-white/20 tracking-[0.1em] uppercase">
-                            © {new Date().getFullYear()} IMAGINTA_CORE
-                        </span>
-                        <div className="flex gap-6">
-                            <Link href="/privacy" className="text-[10px] font-mono text-white/20 hover:text-accent-base/60 transition-colors uppercase tracking-[0.1em]">Privacy</Link>
-                            <Link href="/terms" className="text-[10px] font-mono text-white/20 hover:text-accent-base/60 transition-colors uppercase tracking-[0.1em]">Terms</Link>
-                        </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-3">
-                        <div className="w-1 h-1 rounded-full bg-accent-base/40" />
-                        <span className="text-[9px] font-mono text-white/30 tracking-[0.2em] uppercase">
-                            DESIGNED_IN_BRUSSELS
-                        </span>
-                    </div>
-                </div>
-            </Container>
-        </footer>
-    );
+          <div className="flex items-center gap-3">
+             <div className="px-3 py-1 rounded-full bg-white/[0.02] border border-white/[0.04] backdrop-blur-sm">
+                <span className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-medium">Designed in Brussels</span>
+             </div>
+          </div>
+        </div>
+      </Container>
+    </footer>
+  );
 }

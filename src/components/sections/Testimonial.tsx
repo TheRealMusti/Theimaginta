@@ -2,148 +2,229 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Container, Meta, GlassPane, SectionAtmosphere } from '@/components/ui';
-import { ScrollReveal } from '@/components/motion';
+import { Container, Meta, GrainOverlay, GlassPane } from '@/components/ui';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { EASING } from '@/lib/constants';
+import { ScrollReveal } from '@/components/motion';
 
-const testimonials = [
-    {
-        quote: "Imaginta didn't just build our website — they understood our business and designed something that actually moves the needle. Two years in, they're still our first call.",
-        name: "Sarah Chen",
-        role: "CEO, Lifecycle Health",
-        id: "VERDICT_SC_01"
-    },
-    {
-        quote: "The level of craft and attention to detail is rare. Every deliverable feels considered, intentional, and polished far beyond what we expected.",
-        name: "Marc Dubois",
-        role: "Founder, Kinetic Studios",
-        id: "VERDICT_MD_02"
-    },
-    {
-        quote: "Working with Imaginta feels like having a senior design team embedded in your company. They think like owners, not vendors.",
-        name: "Aisha Rahman",
-        role: "COO, Nexus Ventures",
-        id: "VERDICT_AR_03"
-    },
+const TESTIMONIALS = [
+  {
+    quote: "Scaling a boutique fitness brand requires more than just a landing page. Imaginta built a digital ecosystem that captured our culture perfectly—our member conversion jumped 40% in the first quarter.",
+    name: "Elena Moretti",
+    role: "Founder, THE SCULPT"
+  },
+  {
+    quote: "Simplifying complex financial data without losing the premium feel is a massive challenge. Imaginta delivered a platform that feels like a private bank but functions like modern SaaS. A total game changer.",
+    name: "David Aris",
+    role: "CTO, Vault Finance"
+  },
+  {
+    quote: "As a studio that values minimalism, we are hard to please. Imaginta's attention to motion design and micro-interactions is world-class. They architect experiences that feel truly alive.",
+    name: "Kaito Tanaka",
+    role: "Creative Director, Studio Sora"
+  },
+  {
+    quote: "Most agencies struggle with high-tech concepts. Imaginta translated our neural network infrastructure into a visual narrative that even our non-technical investors could feel. Their technical depth is rare.",
+    name: "Marcus Thorne",
+    role: "VP of Product, Aether Labs"
+  }
 ];
 
+const AUTO_PLAY_INTERVAL = 8000;
+
 export function Testimonial() {
-    const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-        }, 8000);
-        return () => clearInterval(interval);
-    }, []);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % TESTIMONIALS.length);
+      setProgress(0);
+    }, AUTO_PLAY_INTERVAL);
 
-    return (
-        <section aria-label="Client Testimonials" className="relative w-full py-32 md:py-48 overflow-hidden bg-[#030303]">
-            {/* ════ BACKGROUND ATMOSPHERE ════ */}
-            <div className="absolute inset-0 pointer-events-none">
-                <SectionAtmosphere 
-                    number="Reviews" 
-                    glowColor="rgba(201, 166, 107, 0.01)"
-                    glowPosition={{ bottom: '0%', left: '0%' }}
-                    glowSize={1000}
-                    isHovered={false} 
-                />
-                {/* Noise Overlay */}
-                <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none" 
-                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
-                />
-            </div>
+    const progressTimer = setInterval(() => {
+      setProgress((prev) => Math.min(prev + (100 / (AUTO_PLAY_INTERVAL / 16)), 100));
+    }, 16);
 
-            <Container className="relative z-10">
-                <ScrollReveal>
-                    <div className="flex flex-col items-center text-center mb-20">
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="w-8 h-px bg-accent-base/40" />
-                            <Meta className="m-0 text-accent-base uppercase tracking-[0.4em] font-bold text-[10px]">CLIENT_VERDICT</Meta>
-                            <div className="w-8 h-px bg-accent-base/40" />
-                        </div>
-                        <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-white leading-none">
-                            Trusted by <span className="text-white/20 italic font-serif">the vanguard.</span>
-                        </h2>
+    return () => {
+      clearInterval(timer);
+      clearInterval(progressTimer);
+    };
+  }, [currentIndex]);
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % TESTIMONIALS.length);
+    setProgress(0);
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+    setProgress(0);
+  };
+
+  return (
+    <section id="testimonials" className="relative w-full h-[70vh] min-h-[600px] md:min-h-[750px] flex flex-col items-center justify-center bg-transparent overflow-hidden">
+      <GrainOverlay opacity={0.012} />
+      
+      {/* ════ CINEMATIC ATMOSPHERE ════ */}
+      <div className="absolute inset-0 z-0">
+        <Image 
+          src="/assets/images/testimonials-bg.png" 
+          alt="Atmosphere" 
+          fill 
+          className="object-cover opacity-40 brightness-[0.5] scale-110"
+          priority
+        />
+      </div>
+
+      <Container className="relative z-10 w-full max-w-5xl h-full flex flex-col justify-center items-center py-12 md:py-20">
+        {/* Header Module (Compact) */}
+        <div className="flex flex-col items-center text-center mb-12 md:mb-16 space-y-4">
+           <motion.div 
+             initial={{ opacity: 0, y: 10 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             className="flex items-center gap-4"
+           >
+              <div className="w-6 h-px bg-prestige/30" />
+              <Meta className="meta-text meta-amber uppercase tracking-[0.5em] !text-[9px]">Client stories</Meta>
+              <div className="w-6 h-px bg-prestige/30" />
+           </motion.div>
+           <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-white uppercase">
+             Impact <span className="text-white/20 font-serif italic lowercase font-normal">Narratives</span>
+           </h2>
+        </div>
+
+        {/* ════ THE NARRATIVE STAGE ════ */}
+        <ScrollReveal className="w-full relative group max-w-4xl">
+           <GlassPane 
+             plane={2}
+             radius={40}
+             className="bg-[#0A090C]/40 border-white/[0.04] p-8 md:p-16 lg:p-20 relative overflow-hidden group/card shadow-[0_0_100px_rgba(0,0,0,0.5)]"
+           >
+              {/* Internal Progress (Tactical Side Scan) */}
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/[0.02]">
+                 <motion.div 
+                   className="w-full bg-prestige/40 shadow-[0_0_10px_rgba(196,163,110,0.3)]"
+                   style={{ height: `${progress}%` }}
+                 />
+              </div>
+
+              <div className="relative flex flex-col justify-center">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentIndex}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.05 }}
+                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex flex-col gap-10"
+                  >
+                    <div className="relative">
+                       <span className="absolute -top-10 -left-6 text-7xl md:text-8xl font-serif text-prestige/10 leading-none pointer-events-none">“</span>
+                       
+                       <p className="text-xl md:text-3xl lg:text-4xl font-medium tracking-tight text-white/90 leading-[1.2] italic indent-4 line-clamp-4 md:line-clamp-none">
+                         {TESTIMONIALS[currentIndex].quote}
+                       </p>
                     </div>
-                </ScrollReveal>
 
-                <div className="max-w-5xl mx-auto">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={currentIndex}
-                            initial={{ opacity: 0, scale: 0.98, filter: 'blur(10px)' }}
-                            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                            exit={{ opacity: 0, scale: 1.02, filter: 'blur(10px)' }}
-                            transition={{ duration: 0.8, ease: EASING.smoothArray }}
-                            className="relative"
-                        >
-                            <GlassPane interactive={true} className="w-full bg-white/[0.01] border-white/[0.05] p-12 md:p-24 rounded-[48px] md:rounded-[64px] overflow-hidden">
-                                {/* Technical ID Decor */}
-                                <div className="absolute top-12 left-12 flex items-center gap-3">
-                                    <span className="text-[10px] font-mono text-white/20 tracking-[0.3em] uppercase">{testimonials[currentIndex].id}</span>
-                                    <div className="w-1.5 h-1.5 rounded-full bg-accent-base/40" />
-                                </div>
+                    <div className="flex flex-col md:flex-row items-start md:items-end justify-between pt-10 border-t border-white/[0.06] gap-6">
+                       <div className="space-y-2">
+                          <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight uppercase">
+                            {TESTIMONIALS[currentIndex].name}
+                          </h3>
+                          <div className="flex items-center gap-3">
+                             <div className="w-1.5 h-1.5 rounded-full bg-prestige/60" />
+                             <span className="text-[10px] font-mono font-bold tracking-[0.3em] uppercase text-prestige/40">
+                                {TESTIMONIALS[currentIndex].role}
+                             </span>
+                          </div>
+                       </div>
 
-                                <div className="flex flex-col items-center text-center">
-                                    {/* Quote Icon */}
-                                    <div className="mb-12 opacity-10">
-                                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15 45H22.5L27.5 35V15H7.5V35H15V45ZM37.5 45H45L50 35V15H30V35H37.5V45Z" fill="white"/>
-                                        </svg>
-                                    </div>
-
-                                    <p className="text-2xl md:text-4xl font-medium text-white leading-tight tracking-tight mb-16 max-w-3xl">
-                                        &ldquo;{testimonials[currentIndex].quote}&rdquo;
-                                    </p>
-
-                                    <div className="flex flex-col items-center">
-                                        <span className="text-lg font-bold text-white tracking-tight mb-1">
-                                            {testimonials[currentIndex].name}
-                                        </span>
-                                        <Meta className="text-accent-base/60 uppercase tracking-widest text-[11px] font-bold">
-                                            {testimonials[currentIndex].role}
-                                        </Meta>
-                                    </div>
-                                </div>
-
-                                {/* Bottom Decor Lines */}
-                                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-accent-base/20 to-transparent" />
-                            </GlassPane>
-                        </motion.div>
-                    </AnimatePresence>
-
-                    {/* PROGRESS CONTROLS */}
-                    <div className="flex justify-center gap-6 mt-16">
-                        {testimonials.map((_, idx) => (
-                            <button
-                                key={idx}
-                                onClick={() => setCurrentIndex(idx)}
-                                className="group relative py-4"
-                            >
-                                <div className={cn(
-                                    "h-[1px] transition-all duration-700",
-                                    idx === currentIndex ? "w-16 bg-accent-base" : "w-8 bg-white/10 group-hover:bg-white/20"
-                                )} />
-                                <span className={cn(
-                                    "absolute top-6 left-1/2 -translate-x-1/2 text-[9px] font-mono transition-opacity duration-500",
-                                    idx === currentIndex ? "opacity-100 text-accent-base" : "opacity-0"
-                                )}>
-                                    0{idx + 1}
-                                </span>
-                            </button>
-                        ))}
+                       {/* Frequency HUD (Compact) - Plane 3 (RECEDED) */}
+                       <div className="flex items-center gap-6">
+                          <div className="flex items-center gap-1 h-6">
+                             {[...Array(8)].map((_, i) => (
+                                <motion.div 
+                                  key={i}
+                                  animate={{ height: [2, Math.random() * 16 + 4, 2] }}
+                                  transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.05 }}
+                                  className="w-1 bg-prestige/10 rounded-full"
+                                />
+                             ))}
+                          </div>
+                          
+                          <div className="flex flex-col items-end">
+                             <span className="text-[8px] font-mono text-white/10 uppercase tracking-[0.2em]">Partner_Impact</span>
+                             <span className="text-lg font-bold text-white/30 tabular-nums">#0{currentIndex + 1}</span>
+                          </div>
+                       </div>
                     </div>
-                </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+           </GlassPane>
+        </ScrollReveal>
 
-                {/* ════ FOOTER TRANSITION BRIDGE ════ */}
-                <div className="mt-24 flex items-center justify-center gap-12 opacity-10">
-                    <div className="h-px w-32 bg-white" />
-                    <span className="text-[10px] font-mono tracking-[0.5em] uppercase">END_OF_VERDICT_STREAM</span>
-                    <div className="h-px w-32 bg-white" />
-                </div>
-            </Container>
-        </section>
-    );
+        {/* ════ ARCHIVAL NAVIGATION ════ */}
+        <div className="flex flex-col md:flex-row items-center justify-between w-full mt-12 gap-8">
+           <div className="flex items-center gap-3">
+              {TESTIMONIALS.map((_, i) => (
+                 <button 
+                   key={i} 
+                   onClick={() => { setCurrentIndex(i); setProgress(0); }}
+                   className="group relative py-4"
+                 >
+                    <div className={cn(
+                      "h-1 rounded-full transition-all duration-700",
+                      currentIndex === i ? "w-12 bg-prestige" : "w-6 bg-white/10 group-hover:bg-white/30"
+                    )} />
+                    <span className={cn(
+                      "absolute top-8 left-1/2 -translate-x-1/2 text-[9px] font-mono transition-opacity duration-500",
+                      currentIndex === i ? "opacity-100 text-prestige" : "opacity-0"
+                    )}>
+                      0{i + 1}
+                    </span>
+                 </button>
+              ))}
+           </div>
+
+           <div className="flex items-center gap-6">
+              <GlassPane 
+                plane={3} 
+                padding="0" 
+                radius={999}
+                hover={true}
+              >
+                <button 
+                  onClick={handlePrev}
+                  className="group relative w-16 h-16 flex items-center justify-center transition-all overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-prestige opacity-0 group-hover:opacity-5 transition-opacity" />
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-white/30 group-hover:text-prestige transition-colors">
+                      <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </GlassPane>
+
+              <GlassPane 
+                plane={3} 
+                padding="0" 
+                radius={999}
+                hover={true}
+              >
+                <button 
+                  onClick={handleNext}
+                  className="group relative w-16 h-16 flex items-center justify-center transition-all overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-prestige opacity-0 group-hover:opacity-5 transition-opacity" />
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-white/30 group-hover:text-prestige transition-colors">
+                      <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </GlassPane>
+           </div>
+        </div>
+      </Container>
+    </section>
+  );
 }
